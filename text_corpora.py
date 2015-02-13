@@ -59,7 +59,7 @@ def remove_stopwords(corpus_file, delimiter_list, stopwords_file):
 
 
 def lemmatize(corpus_file, delimiter_list, lemmas_file, lemma_splitter):
-    # TODO: Napraviti da radi i za rijec.strip("\"'`.!?;:,*")
+    # TODO: Make it work for word.strip("\"'`.!?;:,*")
 
     punct_split_dict = {d: d + " " for d in delimiter_list}
     with open(corpus_file, "r", encoding='utf-8') as f:
