@@ -34,7 +34,8 @@ def remove_stopwords(corpus_file, delimiter_list, stopwords_file):
 
     with open(corpus_file, "r", encoding='utf-8') as f:
         f_r = f.read()
-        for k, v in punct_split_dict.iteritems(): f_r = f_r.replace(k, v)
+        for k, v in punct_split_dict.iteritems():
+            f_r = f_r.replace(k, v)
         corpus_list = f_r.split()
 
     with open(stopwords_file, "r", encoding='utf-8') as remove_words:
@@ -64,7 +65,8 @@ def lemmatize(corpus_file, delimiter_list, lemmas_file, lemma_splitter):
     punct_split_dict = {d: d + " " for d in delimiter_list}
     with open(corpus_file, "r", encoding='utf-8') as f:
         f_r = f.read()
-        for k, v in punct_split_dict.iteritems(): f_r = f_r.replace(k, v)
+        for k, v in punct_split_dict.iteritems():
+            f_r = f_r.replace(k, v)
         corpus_list = f_r.split()
 
     with open(lemmas_file, "r", encoding='utf-8') as lemmas:
@@ -108,14 +110,16 @@ def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
                  replace_char=""):
     from unicodedata import normalize
 
-    if not preserve_list: preserve_list = [",", ".", ";", "!", "?"]
+    if not preserve_list:
+        preserve_list = [",", ".", ";", "!", "?"]
 
     with open(corpus, "r", encoding='utf-8') as f:
         f_r = f.read()
 
     if split == "Yes":
         punct_split_dict = {d: str(d) + " " for d in preserve_list}
-        for k, v in punct_split_dict.iteritems(): f_r = f_r.replace(k, v)
+        for k, v in punct_split_dict.iteritems():
+            f_r = f_r.replace(k, v)
 
     remove_chars = []
     for i in range(0x0000, 0x0030) + range(0x003A, 0x0041) + \
@@ -143,8 +147,10 @@ def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
                         for i in range(0x00C0, 0x02AE)}
 
         for k, v in replace_dict.iteritems():
-            if v == "": pass
-            else: f_r = f_r.replace(k, v)
+            if v == "":
+                pass
+            else:
+                f_r = f_r.replace(k, v)
 
     corpus_list = f_r.split()
     corpus_list = [word for word in corpus_list if
@@ -178,7 +184,8 @@ def shuffle_corpus(corpus, delimiter_list, mode, end_sign):
         sentences = re_split('\.|\?|\!|\. |\? |\! ', text)
 
         sentences_split = [i.split() for i in sentences]
-        for i in sentences_split: shuffle(i)
+        for i in sentences_split:
+            shuffle(i)
 
         shuffled_list = [x.strip() for x in
                          [' '.join(x) + end_sign for x in sentences_split]]
