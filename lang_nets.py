@@ -63,7 +63,7 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
                 else:
                     break
 
-    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + ".edges")
+    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_coocurrence.edges")
     return g
 
 
@@ -168,6 +168,6 @@ def syntax_net(corpus, d="directed", w="weighted"):
     if w == "weighted":
         g.add_weighted_edges_from(syntax_list)
 
-    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + ".edges")
+    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syntax.edges")
 
     return g
