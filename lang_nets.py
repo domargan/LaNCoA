@@ -20,6 +20,7 @@ along with LaNCoA.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from codecs import open
+import networkx as nx
 
 __author__ = "Domagoj Margan"
 __email__ = "margan.domagoj@gmail.com"
@@ -29,7 +30,6 @@ __license__ = "GPL"
 
 def cooccurrence_net(corpus, delimiter_list, d="directed",
                      w="weighted", window=1, lower="Yes"):
-    import networkx as nx
     global c_list, g
 
     with open(corpus, "r", encoding='utf-8') as f:
@@ -68,7 +68,6 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
 
 
 def syntax_net(corpus, d="directed", w="weighted"):
-    import networkx as nx
     global g
 
     with open(corpus, "r", encoding='utf-8') as f:
