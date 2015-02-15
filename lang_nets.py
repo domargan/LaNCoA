@@ -65,3 +65,110 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
 
     nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + ".edges")
     return g
+
+
+def syntax_net(corpus, d="directed", w="weighted"):
+    import networkx as nx
+    global g
+
+    with open(corpus, "r", encoding='utf-8') as f:
+        lines = f.readlines()
+        lines.append("")
+
+    sentences = []
+    current = []
+    for l in lines:
+        cleaned = l.strip()
+        if len(cleaned) == 0:
+            sentences.append(current)
+            current = []
+        else:
+            current.append(tuple(cleaned.split('\t')))
+
+    lines_parsed = sentences
+
+    def extract(sentence):
+        reduced = [(0, 0, u'ROOT', u'Z')] + [(int(w[0]), int(w[6]), w[1], w[4]) for w in sentence]
+        return reduced
+
+    def remove_special(sentence):
+        global parent_rest
+
+        def first_special(sent):
+            for word in sent:
+                if word[2] == u'--' or word[2] == u'-' or word[2] == u'%':
+                    continue
+                if word[3] == u'Z':
+                    return word[0], word[1]
+            return ()
+
+        def rename(name):
+            if name == u'--' or name == u'-':
+                return u'HYPHEN'
+            elif name == u'%':
+                return u'PERCENT'
+            else:
+                return name
+
+        reduced = sentence
+        to_replace = first_special(reduced)
+        while to_replace:
+            new_reduced = []
+            is_first = True
+
+            for word in reduced:
+                if word[0] == to_replace[0]:
+                    continue
+
+                if word[1] == to_replace[0]:
+                    if is_first:
+                        is_first = False
+                        parent = to_replace[1]
+                        parent_rest = word[0]
+
+                        if to_replace[0] == to_replace[1]:
+                            parent = word[0]
+
+                        new_reduced.append((word[0], parent, rename(word[2]), word[3]))
+                    else:
+                        new_reduced.append((word[0], parent_rest, rename(word[2]), word[3]))
+                else:
+                    new_reduced.append((word[0], word[1], rename(word[2]), word[3]))
+
+            reduced = new_reduced
+            to_replace = first_special(reduced)
+
+        return reduced
+
+    reduced_sentences = [remove_special(extract(sent)) for sent in lines_parsed]
+
+    syntax_edges = dict()
+    for sentence, i in zip(reduced_sentences, range(len(reduced_sentences))):
+        name_map = dict()
+        for word in sentence:
+            name_map[word[0]] = word[2]
+
+        for word in sentence:
+            parent = word[1]
+            current = word[0]
+            edge = (name_map[parent], name_map[current])
+            if edge in syntax_edges:
+                syntax_edges[edge] += 1
+            else:
+                syntax_edges[edge] = 1
+
+    syntax_list = [(k[0], k[1], v) for (k, v) in syntax_edges.items()]
+
+    if d == "directed":
+        g = nx.DiGraph()
+    elif d == "undirected":
+        g = nx.Graph()
+
+    if w == "unweighted":
+        g.add_edges_from(syntax_list)
+    if w == "weighted":
+        g.add_weighted_edges_from(syntax_list)
+
+    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + ".edges")
+
+    return g
