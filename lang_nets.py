@@ -169,7 +169,6 @@ def syntax_net(corpus, d="directed", w="weighted"):
         g.add_weighted_edges_from(syntax_list)
 
     nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syntax.edges")
-
     return g
 
 
