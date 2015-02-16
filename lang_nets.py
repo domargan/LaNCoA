@@ -213,6 +213,7 @@ def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
         g.add_weighted_edges_from(edge_list)
 
     nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syllable.edges")
+    return g
 
 
 def grapheme_net(syllable_network, d="directed", w="weighted"):
