@@ -32,7 +32,7 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
                      w="weighted", window=1, lower="Yes"):
     global c_list, g
 
-    with open(corpus, "r", encoding='utf-8') as f:
+    with open(corpus, "r", encoding="utf-8") as f:
         if lower == "Yes":
             c_list = f.read().lower().split()
         elif lower == "No":
@@ -43,7 +43,7 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
     elif d == "undirected":
         g = nx.Graph()
 
-    delimiters = ''.join(delimiter_list)
+    delimiters = "".join(delimiter_list)
 
     if w == "unweighted":
         for i, word in enumerate(c_list):
@@ -70,7 +70,7 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
 def syntax_net(corpus, d="directed", w="weighted"):
     global g
 
-    with open(corpus, "r", encoding='utf-8') as f:
+    with open(corpus, "r", encoding="utf-8") as f:
         lines = f.readlines()
         lines.append("")
 
@@ -82,12 +82,12 @@ def syntax_net(corpus, d="directed", w="weighted"):
             sentences.append(current)
             current = []
         else:
-            current.append(tuple(cleaned.split('\t')))
+            current.append(tuple(cleaned.split("\t"")))
 
     lines_parsed = sentences
 
     def extract(sentence):
-        reduced = [(0, 0, u'ROOT', u'Z')] + [(int(w[0]), int(w[6]), w[1], w[4]) for w in sentence]
+        reduced = [(0, 0, "ROOT", "Z")] + [(int(w[0]), int(w[6]), w[1], w[4]) for w in sentence]
         return reduced
 
     def remove_special(sentence):
@@ -95,17 +95,17 @@ def syntax_net(corpus, d="directed", w="weighted"):
 
         def first_special(sent):
             for word in sent:
-                if word[2] == u'--' or word[2] == u'-' or word[2] == u'%':
+                if word[2] == "--" or word[2] == "-" or word[2] == "%":
                     continue
-                if word[3] == u'Z':
+                if word[3] == "Z":
                     return word[0], word[1]
             return ()
 
         def rename(name):
-            if name == u'--' or name == u'-':
-                return u'HYPHEN'
-            elif name == u'%':
-                return u'PERCENT'
+            if name == "--" or name == "-":
+                return "HYPHEN"
+            elif name == "%":
+                return "PERCENT"
             else:
                 return name
 
@@ -175,12 +175,12 @@ def syntax_net(corpus, d="directed", w="weighted"):
 def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
     global g
 
-    with open(corpus, "r", encoding='utf-8') as f:
+    with open(corpus, "r", encoding="utf-8") as f:
         f_r = f.readlines()
 
     words = [line.split("\t") for line in f_r]
 
-    with open(syllable_list, "r", encoding='utf-8') as f:
+    with open(syllable_list, "r", encoding="utf-8") as f:
         f_r = f.readlines()
 
     syllables = [line.split() for line in f_r]
