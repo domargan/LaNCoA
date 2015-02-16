@@ -52,6 +52,9 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
                     g.add_edge(c_list[i - j], c_list[i].strip(delimiters))
                 else:
                     break
+
+        nx.write_edgelist(g, corpus.rsplit(".", 1)[0] + "_coocurrence.edges")
+
     elif w == "weighted":
         for i, word in enumerate(c_list):
             for j in range(1, window + 1):
@@ -63,7 +66,8 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
                 else:
                     break
 
-    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_coocurrence.edges")
+        nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_coocurrence.edges")
+
     return g
 
 
@@ -165,10 +169,11 @@ def syntax_net(corpus, d="directed", w="weighted"):
 
     if w == "unweighted":
         g.add_edges_from(syntax_list)
-    if w == "weighted":
+        nx.write_edgelist(g, corpus.rsplit(".", 1)[0] + "_syntax.edges")
+    elif w == "weighted":
         g.add_weighted_edges_from(syntax_list)
+        nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syntax.edges")
 
-    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syntax.edges")
     return g
 
 
@@ -209,10 +214,11 @@ def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
 
     if w == "unweighted":
         g.add_edges_from(edge_list)
-    if w == "weighted":
+        nx.write_edgelist(g, corpus.rsplit(".", 1)[0] + "_syllable.edges")
+    elif w == "weighted":
         g.add_weighted_edges_from(edge_list)
+        nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syllable.edges")
 
-    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syllable.edges")
     return g
 
 
@@ -238,7 +244,11 @@ def grapheme_net(syllable_network, d="directed", w="weighted"):
                 elif w == "unweighted":
                     g.add_edge(graphemes[i - 1], graphemes[i])
 
-    nx.write_weighted_edgelist(g, syllable_network.rsplit(".", 1)[0] + "_grapheme.edges")
+    if w == "unweighted":
+        nx.write_edgelist(g, syllable_network.rsplit(".", 1)[0] + "_grapheme.edges")
+    elif w == "weighted":
+        nx.write_weighted_edgelist(g, syllable_network.rsplit(".", 1)[0] + "_grapheme.edges")
+
     return g
 
 
@@ -261,7 +271,7 @@ def words_subnet(word_network, word, words_file, d="directed", w="weighted"):
 
     if w == "unweighted":
         nx.write_edgelist(sg, word_network.rsplit(".", 1)[0] + "_subnetwork.edges")
-    if w == "weighted":
+    elif w == "weighted":
         nx.write_weighted_edgelist(sg, word_network.rsplit(".", 1)[0] + "_subnetwork.edges")
 
     return sg
