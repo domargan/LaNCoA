@@ -175,7 +175,7 @@ def syntax_net(corpus, d="directed", w="weighted"):
 
 def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
     global g
-    
+
     with open(corpus, "r", encoding='utf-8') as f:
         f_r = f.readlines()
 
@@ -214,3 +214,29 @@ def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
         g.add_weighted_edges_from(edge_list)
 
     nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syllable.edges")
+
+
+def grapheme_net(syllable_network, d="directed", w="weighted"):
+    global syllable_net
+
+    if d == "directed":
+        syllable_net = nx.read_weighted_edgelist(syllable_network, create_using=nx.DiGraph())
+        g = nx.DiGraph()
+    elif d == "undirected":
+        syllable_net = nx.read_weighted_edgelist(syllable_network)
+        g = nx.Graph()
+
+    for node in syllable_net.nodes():
+        graphemes = list(node)
+        for i, gr in enumerate(graphemes):
+            if i > 0:
+                if w == "weighted":
+                    if g.has_edge(graphemes[i - 1], graphemes[i]):
+                        g[graphemes[i - 1]][graphemes[i]]['weight'] += 1
+                    else:
+                        g.add_edge(graphemes[i - 1], graphemes[i], weight=1)
+                elif w == "unweighted":
+                    g.add_edge(graphemes[i - 1], graphemes[i])
+
+    nx.write_weighted_edgelist(g, syllable_network.rsplit(".", 1)[0] + "_grapheme.edges")
+    return g
