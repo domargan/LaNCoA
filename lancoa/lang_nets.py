@@ -252,7 +252,7 @@ def grapheme_net(syllable_network, d="directed", w="weighted"):
     return g
 
 
-def words_subnet(word_network, word, words_file, d="directed", w="weighted"):
+def wordlist_subnet(word_network, word, words_file, d="directed", w="weighted"):
     global word_net
 
     if d == "directed":
