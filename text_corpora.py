@@ -32,13 +32,13 @@ def remove_stopwords(corpus_file, delimiter_list, stopwords_file):
 
     punct_split_dict = {d: d + " " for d in delimiter_list}
 
-    with open(corpus_file, "r", encoding='utf-8') as f:
+    with open(corpus_file, "r", encoding="utf-8") as f:
         f_r = f.read()
         for k, v in punct_split_dict.iteritems():
             f_r = f_r.replace(k, v)
         corpus_list = f_r.split()
 
-    with open(stopwords_file, "r", encoding='utf-8') as remove_words:
+    with open(stopwords_file, "r", encoding="utf-8") as remove_words:
         remove_words_list = remove_words.read().lower().split()
 
     for i, word in enumerate(corpus_list):
@@ -49,27 +49,27 @@ def remove_stopwords(corpus_file, delimiter_list, stopwords_file):
                 elif word[:-len(d)].lower() in remove_words_list:
                     corpus_list[i] = d
             elif word in remove_words_list or word.lower() in remove_words_list:
-                corpus_list[i] = ''
+                corpus_list[i] = ""
             elif word not in remove_words_list or word.lower() not in remove_words_list:
                 pass
 
     with open(corpus_file.rsplit(".", 1)[0] + "_sw_removed." +
                       corpus_file.rsplit(".", 1)[1], "w",
-              encoding='utf-8') as write_f:
-        write_f.write(' '.join(word for word in corpus_list if word != ''))
+              encoding="utf-8") as write_f:
+        write_f.write(" ".join(word for word in corpus_list if word != ""))
 
 
 def lemmatize(corpus_file, delimiter_list, lemmas_file, lemma_splitter):
     # TODO: Make it work for word.strip("\"'`.!?;:,*")
 
     punct_split_dict = {d: d + " " for d in delimiter_list}
-    with open(corpus_file, "r", encoding='utf-8') as f:
+    with open(corpus_file, "r", encoding="utf-8") as f:
         f_r = f.read()
         for k, v in punct_split_dict.iteritems():
             f_r = f_r.replace(k, v)
         corpus_list = f_r.split()
 
-    with open(lemmas_file, "r", encoding='utf-8') as lemmas:
+    with open(lemmas_file, "r", encoding="utf-8") as lemmas:
         lemmas_r = lemmas.readlines()
 
     lemmas_list = [line.split(lemma_splitter) for line in lemmas_r]
@@ -102,8 +102,8 @@ def lemmatize(corpus_file, delimiter_list, lemmas_file, lemma_splitter):
 
     with open(corpus_file.rsplit(".", 1)[0] + "_lemmatized." +
                       corpus_file.rsplit(".", 1)[1], "w",
-              encoding='utf-8') as write_f:
-        write_f.write(' '.join(corpus_list))
+              encoding="utf-8") as write_f:
+        write_f.write(" ".join(corpus_list))
 
 
 def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
@@ -113,7 +113,7 @@ def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
     if not preserve_list:
         preserve_list = [",", ".", ";", "!", "?"]
 
-    with open(corpus, "r", encoding='utf-8') as f:
+    with open(corpus, "r", encoding="utf-8") as f:
         f_r = f.read()
 
     if split == "Yes":
@@ -142,8 +142,8 @@ def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
 
     if nfkd == "Yes":
         replace_dict = {eval('u"\\u%04x"' % i):
-                            normalize('NFKD', eval('u"\\u%04x"' % i)).encode(
-                                'ascii', 'ignore')
+                            normalize("NFKD", eval('u"\\u%04x"' % i)).encode(
+                                "ascii", "ignore")
                         for i in range(0x00C0, 0x02AE)}
 
         for k, v in replace_dict.iteritems():
@@ -158,8 +158,8 @@ def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
 
     with open(corpus.rsplit(".", 1)[0] + "_cleaned." +
                       corpus.rsplit(".", 1)[1], "w",
-              encoding='utf-8') as write_f:
-        write_f.write(' '.join(corpus_list))
+              encoding="utf-8") as write_f:
+        write_f.write(" ".join(corpus_list))
 
 
 def shuffle_corpus(corpus, delimiter_list, mode, end_sign):
@@ -167,7 +167,7 @@ def shuffle_corpus(corpus, delimiter_list, mode, end_sign):
     from random import shuffle
     from random import randint
 
-    with open(corpus, "r", encoding='utf-8') as f:
+    with open(corpus, "r", encoding="utf-8") as f:
         f_r = f.read()
 
     punct_split_dict = {d: str(d) + " " for d in delimiter_list}
@@ -180,7 +180,7 @@ def shuffle_corpus(corpus, delimiter_list, mode, end_sign):
                    word != "" and word not in delimiter_list]
 
     if mode == "sentence":
-        text = ' '.join(corpus_list)
+        text = " ".join(corpus_list)
         sentences = re_split('\.|\?|\!|\. |\? |\! ', text)
 
         sentences_split = [i.split() for i in sentences]
@@ -188,12 +188,12 @@ def shuffle_corpus(corpus, delimiter_list, mode, end_sign):
             shuffle(i)
 
         shuffled_list = [x.strip() for x in
-                         [' '.join(x) + end_sign for x in sentences_split]]
+                         [" ".join(x) + end_sign for x in sentences_split]]
 
         with open(corpus.rsplit(".", 1)[0] + "_sentence_shuffled." +
                           corpus.rsplit(".", 1)[1], "w",
-                  encoding='utf-8') as write_f:
-            write_f.write(' '.join(shuffled_list))
+                  encoding="utf-8") as write_f:
+            write_f.write(" ".join(shuffled_list))
 
     elif mode == "text":
         shuffled_list = corpus_list
@@ -214,5 +214,5 @@ def shuffle_corpus(corpus, delimiter_list, mode, end_sign):
 
         with open(corpus.rsplit(".", 1)[0] + "_text_shuffled." +
                           corpus.rsplit(".", 1)[1], "w",
-                  encoding='utf-8') as write_f:
-            write_f.write(' '.join(shuffled_list))
+                  encoding="utf-8") as write_f:
+            write_f.write(" ".join(shuffled_list))
