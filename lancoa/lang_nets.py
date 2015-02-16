@@ -91,8 +91,6 @@ def syntax_net(corpus, d="directed", w="weighted"):
         return reduced
 
     def remove_special(sentence):
-        global parent_rest
-
         def first_special(sent):
             for word in sent:
                 if word[2] == "--" or word[2] == "-" or word[2] == "%":
