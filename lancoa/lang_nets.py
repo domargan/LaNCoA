@@ -275,3 +275,27 @@ def wordlist_subnet(word_network, word, words_file, d="directed", w="weighted"):
         nx.write_weighted_edgelist(sg, word_network.rsplit(".", 1)[0] + "_wordlist_subnetwork.edges")
 
     return sg
+
+
+def ego_word_subnet(word_network, word, radius=1, d="directed", w="weighted", neighborhood="all"):
+    global sg
+
+    if d == "directed":
+        word_net = nx.read_weighted_edgelist(word_network, create_using=nx.DiGraph())
+        if neighborhood == "successors":
+            sg = nx.ego_graph(word_net, word, radius)
+        elif neighborhood == "predecessors":
+            sg = nx.ego_graph(word_net.reverse(), word, radius)
+        elif neighborhood == "all":
+            sg = nx.ego_graph(word_net, word, radius, undirected=True)
+
+    elif d == "undirected":
+        word_net = nx.read_weighted_edgelist(word_network)
+        sg = nx.ego_graph(word_net, word, radius)
+
+    if w == "unweighted":
+        nx.write_edgelist(sg, word_network.rsplit(".", 1)[0] + "_ego_subnetwork.edges")
+    elif w == "weighted":
+        nx.write_weighted_edgelist(sg, word_network.rsplit(".", 1)[0] + "_ego_subnetwork.edges")
+
+    return sg
