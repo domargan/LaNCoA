@@ -171,3 +171,46 @@ def syntax_net(corpus, d="directed", w="weighted"):
     nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syntax.edges")
 
     return g
+
+
+def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
+    global g
+    
+    with open(corpus, "r", encoding='utf-8') as f:
+        f_r = f.readlines()
+
+    words = [line.split("\t") for line in f_r]
+
+    with open(syllable_list, "r", encoding='utf-8') as f:
+        f_r = f.readlines()
+
+    syllables = [line.split() for line in f_r]
+
+    if d == "directed":
+        g = nx.DiGraph()
+    elif d == "undirected":
+        g = nx.Graph()
+
+    syllable_edges = dict()
+
+    for i in words:
+        if len(i) > 1:
+            for j in syllables:
+                if i[1] == j[0]:
+                    for l, r in zip(j[1].split("-")[:-1], j[1].split("-")[1:]):
+                        edge = (l, r)
+                        if edge in syllable_edges:
+                            syllable_edges[edge] += 1
+                        else:
+                            syllable_edges[edge] = 1
+                else:
+                    g.add_node(i[1])
+
+    edge_list = [(k[0], k[1], v) for (k, v) in syllable_edges.items()]
+
+    if w == "unweighted":
+        g.add_edges_from(edge_list)
+    if w == "weighted":
+        g.add_weighted_edges_from(edge_list)
+
+    nx.write_weighted_edgelist(g, corpus.rsplit(".", 1)[0] + "_syllable.edges")
