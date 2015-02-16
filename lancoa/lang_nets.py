@@ -30,8 +30,6 @@ __license__ = "GPL"
 
 def cooccurrence_net(corpus, delimiter_list, d="directed",
                      w="weighted", window=1, lower="Yes"):
-    global c_list, g
-
     with open(corpus, "r", encoding="utf-8") as f:
         if lower == "Yes":
             c_list = f.read().lower().split()
@@ -72,8 +70,6 @@ def cooccurrence_net(corpus, delimiter_list, d="directed",
 
 
 def syntax_net(corpus, d="directed", w="weighted"):
-    global g
-
     with open(corpus, "r", encoding="utf-8") as f:
         lines = f.readlines()
         lines.append("")
@@ -178,8 +174,6 @@ def syntax_net(corpus, d="directed", w="weighted"):
 
 
 def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
-    global g
-
     with open(corpus, "r", encoding="utf-8") as f:
         f_r = f.readlines()
 
@@ -223,8 +217,6 @@ def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
 
 
 def grapheme_net(syllable_network, d="directed", w="weighted"):
-    global syllable_net
-
     if d == "directed":
         syllable_net = nx.read_weighted_edgelist(syllable_network, create_using=nx.DiGraph())
         g = nx.DiGraph()
@@ -253,8 +245,6 @@ def grapheme_net(syllable_network, d="directed", w="weighted"):
 
 
 def wordlist_subnet(word_network, word, words_file, d="directed", w="weighted"):
-    global word_net
-
     if d == "directed":
         word_net = nx.read_weighted_edgelist(word_network, create_using=nx.DiGraph())
     elif d == "undirected":
@@ -278,8 +268,6 @@ def wordlist_subnet(word_network, word, words_file, d="directed", w="weighted"):
 
 
 def ego_word_subnet(word_network, word, radius=1, d="directed", w="weighted", neighborhood="all"):
-    global sg
-
     if d == "directed":
         word_net = nx.read_weighted_edgelist(word_network, create_using=nx.DiGraph())
         if neighborhood == "successors":
