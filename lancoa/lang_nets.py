@@ -240,3 +240,28 @@ def grapheme_net(syllable_network, d="directed", w="weighted"):
 
     nx.write_weighted_edgelist(g, syllable_network.rsplit(".", 1)[0] + "_grapheme.edges")
     return g
+
+
+def words_subnet(word_network, word, words_file, d="directed", w="weighted"):
+    global word_net
+
+    if d == "directed":
+        word_net = nx.read_weighted_edgelist(word_network, create_using=nx.DiGraph())
+    elif d == "undirected":
+        word_net = nx.read_weighted_edgelist(word_network)
+
+    with open(words_file, "r", encoding="utf-8") as f:
+        words = f.read()
+
+    word_list = words.split()
+    if word not in word_list:
+        word_list.append(word)
+
+    sg = nx.Graph(word_net.subgraph(word_list))
+
+    if w == "unweighted":
+        nx.write_edgelist(sg, word_network.rsplit(".", 1)[0] + "_subnetwork.edges")
+    if w == "weighted":
+        nx.write_weighted_edgelist(sg, word_network.rsplit(".", 1)[0] + "_subnetwork.edges")
+
+    return sg
