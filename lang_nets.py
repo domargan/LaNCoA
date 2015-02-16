@@ -82,7 +82,7 @@ def syntax_net(corpus, d="directed", w="weighted"):
             sentences.append(current)
             current = []
         else:
-            current.append(tuple(cleaned.split("\t"")))
+            current.append(tuple(cleaned.split("\t")))
 
     lines_parsed = sentences
 
