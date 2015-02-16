@@ -270,8 +270,8 @@ def wordlist_subnet(word_network, word, words_file, d="directed", w="weighted"):
     sg = nx.Graph(word_net.subgraph(word_list))
 
     if w == "unweighted":
-        nx.write_edgelist(sg, word_network.rsplit(".", 1)[0] + "_subnetwork.edges")
+        nx.write_edgelist(sg, word_network.rsplit(".", 1)[0] + "_wordlist_subnetwork.edges")
     elif w == "weighted":
-        nx.write_weighted_edgelist(sg, word_network.rsplit(".", 1)[0] + "_subnetwork.edges")
+        nx.write_weighted_edgelist(sg, word_network.rsplit(".", 1)[0] + "_wordlist_subnetwork.edges")
 
     return sg
