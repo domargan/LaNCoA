@@ -244,9 +244,8 @@ def grapheme_net(syllable_network, d="directed", w="weighted"):
 
 def wordlist_subnet(word_network, word, words_file, d="directed", w="weighted"):
     with open(words_file, "r", encoding="utf-8") as f:
-        words = f.read()
+        word_list = f.read().splitlines()
 
-    word_list = words.split()
     if word not in word_list:
         word_list.append(word)
 
