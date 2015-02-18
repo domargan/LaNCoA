@@ -131,7 +131,7 @@ def entropy_out_strenght(network):
     return entropy
 
 
-def in_selectivity(network):
+def entropy_in_selectivity(network):
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
     n = g.number_of_nodes()
 
