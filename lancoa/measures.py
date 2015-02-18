@@ -22,6 +22,7 @@ along with LaNCoA.  If not, see <http://www.gnu.org/licenses/>.
 import networkx as nx
 import math
 
+
 def reciprocity(network):
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
 
