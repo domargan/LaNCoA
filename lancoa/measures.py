@@ -53,3 +53,22 @@ def entropy_in_degree(network):
     entropy = -(entropy) / math.log(n)
 
     return entropy
+
+
+def entropy_out_degree(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+    n = g.number_of_nodes()
+
+    entropy = 0
+    deg_sum = 0
+
+    for i in g.nodes():
+        deg_sum += g.out_degree(i)
+
+    for i in g.nodes():
+        if g.out_degree(i) > 0:
+            entropy += ((g.out_degree(i) / float(deg_sum)) * (math.log(g.out_degree(i) / float(deg_sum))))
+
+    entropy = -(entropy) / math.log(n)
+
+    return entropy
