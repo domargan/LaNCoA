@@ -75,3 +75,27 @@ def hubs(network, n, d="directed"):
                     write_f.write(str(value[0]) + "\t\tDegree: " + str(value[1]) + "\n")
                 else:
                     break
+
+
+def weightiest_edges(network, n=20, d="directed"):
+    if d == "directed":
+        g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+    elif d == "undirected":
+        g = nx.read_weighted_edgelist(network)
+
+    if g.number_of_edges() < n:
+        n = g.number_of_edges()
+
+    weight_dict = {(u, v): i['weight'] for (u, v, i) in g.edges(data=True)}
+    weight_list = [edge for edge in weight_dict.iteritems()]
+    weight_list.sort(key=lambda x: x[1])
+    weight_list.reverse()
+
+    with open(network.rsplit(".", 1)[0] + "_weightiest_edges.txt", "w",
+              encoding="utf-8") as write_f:
+        for i, value in enumerate(weight_list):
+            if i < n:
+                write_f.write(str(value[0][0]) + "\t\t: " +
+                              str(value[0][1]) + "\t\t" + str(value[1]) + "\n")
+            else:
+                break
