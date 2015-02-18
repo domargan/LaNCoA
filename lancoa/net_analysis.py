@@ -28,7 +28,7 @@ __copyright__ = "Copyright 2015, Domagoj Margan"
 __license__ = "GPL"
 
 
-def hubs(network, n, d="directed"):
+def hubs(network, n=20, d="directed"):
     n = int(n)
 
     if d == "directed":
