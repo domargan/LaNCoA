@@ -20,7 +20,7 @@ along with LaNCoA.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import networkx as nx
-
+import math
 
 def reciprocity(network):
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
@@ -34,3 +34,22 @@ def reciprocity(network):
     ro = float((r - a)) / float((1 - a))
 
     return r, a, ro
+
+
+def entropy_in_degree(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+    n = g.number_of_nodes()
+
+    entropy = 0
+    deg_sum = 0
+
+    for i in g.nodes():
+        deg_sum += g.in_degree(i)
+
+    for i in g.nodes():
+        if g.in_degree(i) > 0:
+            entropy += ((g.in_degree(i) / float(deg_sum)) * (math.log(g.in_degree(i) / float(deg_sum))))
+
+    entropy = -(entropy) / math.log(n)
+
+    return entropy
