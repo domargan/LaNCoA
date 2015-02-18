@@ -91,3 +91,22 @@ def entropy_degree(network):
     entropy = -(entropy) / math.log(n)
 
     return entropy
+
+
+def entropy_in_strenght(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+    n = g.number_of_nodes()
+
+    entropy = 0
+    deg_sum = 0
+
+    for i in g.nodes():
+        deg_sum += g.in_degree(i, weight='weight')
+
+    for i in g.nodes():
+        if g.in_degree(i) > 0:
+            entropy += ((g.in_degree(i, weight='weight') / float(deg_sum)) * (math.log(g.in_degree(i, weight='weight') / float(deg_sum))))
+
+    entropy = -(entropy) / math.log(n)
+
+    return entropy
