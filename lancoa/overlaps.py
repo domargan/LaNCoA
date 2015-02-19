@@ -54,7 +54,7 @@ def total_overlap(network1, network2, d="directed"):
 
     t_overlap = (float(overlap) / float(nx.compose(g1, g2).number_of_edges()))
 
-    print t_overlap
+    return t_overlap
 
 
 def total_weighted_overlap(network1, network2, d="directed"):
