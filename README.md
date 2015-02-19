@@ -12,3 +12,5 @@ Networks can be constructed from the text corpora on word and sub-word levels:
 * sub-word level
  * syllable networks
  * grapheme networks
+
+! Work in progress. !
