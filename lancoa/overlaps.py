@@ -55,3 +55,37 @@ def total_overlap(network1, network2, d="directed"):
     t_overlap = (float(overlap) / float(nx.compose(g1, g2).number_of_edges()))
 
     print t_overlap
+
+
+def total_weighted_overlap(network1, network2, d="directed"):
+    if d == "directed":
+        g1 = nx.read_weighted_edgelist(network1, create_using=nx.DiGraph())
+        g2 = nx.read_weighted_edgelist(network2, create_using=nx.DiGraph())
+    elif d == "undirected":
+        g1 = nx.read_weighted_edgelist(network1)
+        g2 = nx.read_weighted_edgelist(network2)
+
+    union = nx.compose(g1, g2)
+
+    w_max_g1 = 0
+    w_max_g2 = 0
+
+    for (u,d,v) in g1.edges(data=True):
+        if v['weight'] > w_max_g1:
+            w_max_g1 = v['weight']
+
+    for (u,d,v) in g2.edges(data=True):
+        if v['weight'] > w_max_g2:
+            w_max_g2 = v['weight']
+
+    overall_weight = 0
+    for (u,d,v) in union.edges(data=True):
+        overall_weight += v['weight']
+
+    sum_list = [min(float((g1.edge[u][d]['weight'] / w_max_g1)), float((g2.edge[u][d]['weight'] / w_max_g2)))
+                for (u,d,v) in g1.edges(data=True) if g2.has_edge(u, d)]
+
+    overlap = sum(sum_list)
+    t_w_overlap = (float(overlap) / float(overall_weight))
+
+    return t_w_overlap
