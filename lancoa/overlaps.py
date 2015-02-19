@@ -37,3 +37,21 @@ def jaccard(network1, network2, d="directed"):
     jd = 1 - j
 
     return j, jd
+
+
+def total_overlap(network1, network2, d="directed"):
+    if d == "directed":
+        g1 = nx.read_weighted_edgelist(network1, create_using=nx.DiGraph())
+        g2 = nx.read_weighted_edgelist(network2, create_using=nx.DiGraph())
+    elif d == "undirected":
+        g1 = nx.read_weighted_edgelist(network1)
+        g2 = nx.read_weighted_edgelist(network2)
+
+    overlap = 0
+    for i in g1.edges():
+        if g2.has_edge(i[0], i[1]):
+            overlap += 1
+
+    t_overlap = (float(overlap) / float(nx.compose(g1, g2).number_of_edges()))
+
+    print t_overlap
