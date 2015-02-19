@@ -51,7 +51,7 @@ def entropy_in_degree(network):
         if g.in_degree(i) > 0:
             entropy += ((g.in_degree(i) / float(deg_sum)) * (math.log(g.in_degree(i) / float(deg_sum))))
 
-    entropy = -(entropy) / math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
 
@@ -70,7 +70,7 @@ def entropy_out_degree(network):
         if g.out_degree(i) > 0:
             entropy += ((g.out_degree(i) / float(deg_sum)) * (math.log(g.out_degree(i) / float(deg_sum))))
 
-    entropy = -(entropy) / math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
 
@@ -89,7 +89,7 @@ def entropy_degree(network):
         if g.degree(i) > 0:
             entropy += ((g.degree(i) / float(deg_sum)) * (math.log(g.degree(i) / float(deg_sum))))
 
-    entropy = -(entropy) / math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
 
@@ -108,7 +108,7 @@ def entropy_in_strenght(network):
         if g.in_degree(i) > 0:
             entropy += ((g.in_degree(i, weight='weight') / float(deg_sum)) * (math.log(g.in_degree(i, weight='weight') / float(deg_sum))))
 
-    entropy = -(entropy) / math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
 
@@ -127,7 +127,7 @@ def entropy_out_strenght(network):
         if g.out_degree(i) > 0:
             entropy += ((g.out_degree(i, weight='weight') / float(deg_sum)) * (math.log(g.out_degree(i, weight='weight') / float(deg_sum))))
 
-    entropy = -(entropy) / math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
 
@@ -146,7 +146,7 @@ def entropy_strenght(network):
         if g.degree(i) > 0:
             entropy += ((g.degree(i, weight='weight') / float(deg_sum)) * (math.log(g.degree(i, weight='weight') / float(deg_sum))))
 
-    entropy = -(entropy) / math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
 
@@ -173,7 +173,7 @@ def entropy_in_selectivity(network):
         if selectivity > 0:
             entropy += ((selectivity / float(sel_sum)) * (math.log(selectivity / float(sel_sum))))
 
-    entropy = -(entropy)/math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
 
@@ -200,7 +200,7 @@ def entropy_out_selectivity(network):
         if selectivity > 0:
             entropy += ((selectivity / float(sel_sum)) * (math.log(selectivity / float(sel_sum))))
 
-    entropy = -(entropy)/math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
 
@@ -227,6 +227,6 @@ def entropy_selectivity(network):
         if selectivity > 0:
             entropy += ((selectivity / float(sel_sum)) * (math.log(selectivity / float(sel_sum))))
 
-    entropy = -(entropy)/math.log(n)
+    entropy = -entropy / math.log(n)
 
     return entropy
