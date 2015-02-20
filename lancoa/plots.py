@@ -19,33 +19,35 @@ You should have received a copy of the GNU General Public License
 along with LaNCoA.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import networkx as nx
+import measures
 import matplotlib.pyplot as plt
-import matplotlib
 from collections import OrderedDict
 
 
 def in_selectivity_rank_plot(network1, network2=None, network3=None, network4=None, network5=None, network6=None):
     networks = OrderedDict(sorted(locals().items()))
 
-    xlabel = "rank"
-    ylabel = "in_selectivity"
-    figname = "in_selectivity_rank.png"
+    figname = "in_selectivity_rank_plot.png"
+
+    colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
+    color_idx = 0
+    markers = ["o", "v", "^", "s", "*", "p"]
+    marker_idx = 0
 
     for v in networks.itervalues():
         if v != None:
-            g = nx.read_weighted_edgelist(v, create_using=nx.DiGraph())
-
-            selectivity_dict = {}
-            for node in g.nodes():
-                s = g.in_degree(node, weight='weight')
-                k = g.in_degree(node, weight=None)
-                if k > 0:
-                    selectivity = s / k
-                    selectivity_dict[node] = selectivity
-                else:
-                    selectivity_dict[node] = 0
+            selectivity_dict = measures.in_selectivity(v)
             selectivity = selectivity_dict.values()
-            selectivity_sequence = sorted(selectivity,reverse=True)
-            plt.loglog(selectivity_sequence, 'b-', color='blue', lw=3, alpha=0.7, marker='o', label=str(k))
+            selectivity_sequence = sorted(selectivity, reverse=True)
+
+            plt.loglog(selectivity_sequence, 'b-', color=colors[color_idx],
+                       lw=3, alpha=0.7, marker=markers[marker_idx], label=v.rsplit(".", 1)[0])
+            plt.savefig(figname)
+
+            color_idx += 1
+            marker_idx += 1
+
+            plt.xlabel("rank")
+            plt.ylabel("in-selectivity")
+            plt.legend(loc=1, shadow=True)
             plt.savefig(figname)
