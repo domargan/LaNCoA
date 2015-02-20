@@ -23,31 +23,46 @@ import measures
 import matplotlib.pyplot as plt
 from collections import OrderedDict
 
+""
+def in_selectivity_rank_plot(name, d, network1, network2=None, network3=None, network4=None, network5=None, network6=None):
+    figname = str(name)
 
-def in_selectivity_rank_plot(network1, network2=None, network3=None, network4=None, network5=None, network6=None):
-    networks = OrderedDict(sorted(locals().items()))
-
-    figname = "in_selectivity_rank_plot.png"
+    if d == "in":
+        ylabel = "in-selectivity"
+    elif d == "out":
+        ylabel = "out-selectivity"
+    elif d == "undirected":
+        ylabel = "selectivity"
 
     colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
     color_idx = 0
     markers = ["o", "v", "^", "s", "*", "p"]
     marker_idx = 0
 
-    for v in networks.itervalues():
-        if v != None:
-            selectivity_dict = measures.in_selectivity(v)
+    networks = [network1, network2, network3, network4, network5, network6]
+
+    for net in networks:
+        if net != None:
+            if d == "in":
+                selectivity_dict = measures.in_selectivity(net)
+            elif d == "out":
+                selectivity_dict = measures.out_selectivity(net)
+            elif d == "undirected":
+                selectivity_dict = measures.selectivity(net)
+
             selectivity = selectivity_dict.values()
             selectivity_sequence = sorted(selectivity, reverse=True)
 
             plt.loglog(selectivity_sequence, 'b-', color=colors[color_idx],
-                       lw=3, alpha=0.7, marker=markers[marker_idx], label=v.rsplit(".", 1)[0])
+                       lw=3, alpha=0.7, marker=markers[marker_idx], label=net.rsplit(".", 1)[0])
             plt.savefig(figname)
 
             color_idx += 1
             marker_idx += 1
 
             plt.xlabel("rank")
-            plt.ylabel("in-selectivity")
+            plt.ylabel(ylabel)
             plt.legend(loc=1, shadow=True)
             plt.savefig(figname)
+
+    plt.clf()
