@@ -278,3 +278,22 @@ def selectivity(network):
             selectivity_dict[node] = 0
 
     return selectivity_dict
+
+
+def in_ipr(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+
+    inv_part_dict = {}
+    for node in g.nodes():
+        s = g.in_degree(node, weight='weight')
+        predcessors = g.predecessors(node)
+        if (len(predcessors) == 0 and s == 0):
+            inv_part_dict[node] = 0
+        else:
+            sum_list = []
+            for in_node in predcessors:
+                a = g.edge[in_node][node]['weight']
+                sum_list.append(math.pow((float(a) / float(s)), 2))
+                inv_part_dict[node] = sum(sum_list)
+
+    return inv_part_dict
