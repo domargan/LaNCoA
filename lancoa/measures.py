@@ -175,7 +175,7 @@ def entropy_degree(network):
     return entropy
 
 
-def entropy_in_strenght(network):
+def entropy_in_strength(network):
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
     n = g.number_of_nodes()
 
@@ -192,7 +192,7 @@ def entropy_in_strenght(network):
     return entropy
 
 
-def entropy_out_strenght(network):
+def entropy_out_strength(network):
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
     n = g.number_of_nodes()
 
@@ -209,7 +209,7 @@ def entropy_out_strenght(network):
     return entropy
 
 
-def entropy_strenght(network):
+def entropy_strength(network):
     g = nx.read_weighted_edgelist(network)
     n = g.number_of_nodes()
 
