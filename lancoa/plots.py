@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 from collections import OrderedDict
 
 ""
-def in_selectivity_rank_plot(name, d, network1, network2=None, network3=None, network4=None, network5=None, network6=None):
+def selectivity_rank_plot(name, d, network1, network2=None, network3=None, network4=None, network5=None, network6=None):
     figname = str(name)
 
     if d == "in":
