@@ -23,6 +23,11 @@ import measures
 import matplotlib.pyplot as plt
 import networkx as nx
 
+__author__ = "Domagoj Margan"
+__email__ = "margan.domagoj@gmail.com"
+__copyright__ = "Copyright 2015, Domagoj Margan"
+__license__ = "GPL"
+
 
 def selectivity_rank_plot(name, network1, network2=None, network3=None,
                           network4=None, network5=None, network6=None,

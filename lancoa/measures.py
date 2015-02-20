@@ -22,6 +22,11 @@ along with LaNCoA.  If not, see <http://www.gnu.org/licenses/>.
 import networkx as nx
 import math
 
+__author__ = "Domagoj Margan"
+__email__ = "margan.domagoj@gmail.com"
+__copyright__ = "Copyright 2015, Domagoj Margan"
+__license__ = "GPL"
+
 
 def in_selectivity(network):
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())

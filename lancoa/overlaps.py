@@ -21,6 +21,11 @@ along with LaNCoA.  If not, see <http://www.gnu.org/licenses/>.
 
 import networkx as nx
 
+__author__ = "Domagoj Margan"
+__email__ = "margan.domagoj@gmail.com"
+__copyright__ = "Copyright 2015, Domagoj Margan"
+__license__ = "GPL"
+
 
 def jaccard(network1, network2, d="directed"):
     if d == "directed":
