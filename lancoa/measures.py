@@ -102,7 +102,7 @@ def out_ipr(network):
         else:
             sum_list = []
             for out_node in successors:
-                a = g.edge[out_node][node]['weight']
+                a = g.edge[node][out_node]['weight']
                 sum_list.append(math.pow((float(a) / float(s)), 2))
                 inv_part_dict[node] = sum(sum_list)
 
@@ -274,6 +274,42 @@ def entropy_selectivity(network):
     for k, v in sel_dict.iteritems():
         if v > 0:
             entropy += ((v / float(sel_sum)) * (math.log(v / float(sel_sum))))
+
+    entropy = -entropy / math.log(n)
+
+    return entropy
+
+
+def entropy_in_ipr(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+    n = g.number_of_nodes()
+
+    entropy = 0
+
+    ipr_dict = in_ipr(network)
+    ipr_sum = sum(ipr_dict.values())
+
+    for k, v in ipr_dict.iteritems():
+        if v > 0:
+            entropy += ((v / float(ipr_sum)) * (math.log(v / float(ipr_sum))))
+
+    entropy = -entropy / math.log(n)
+
+    return entropy
+
+
+def entropy_out_ipr(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+    n = g.number_of_nodes()
+
+    entropy = 0
+
+    ipr_dict = out_ipr(network)
+    ipr_sum = sum(ipr_dict.values())
+
+    for k, v in ipr_dict.iteritems():
+        if v > 0:
+            entropy += ((v / float(ipr_sum)) * (math.log(v / float(ipr_sum))))
 
     entropy = -entropy / math.log(n)
 
