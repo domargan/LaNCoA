@@ -230,3 +230,19 @@ def entropy_selectivity(network):
     entropy = -entropy / math.log(n)
 
     return entropy
+
+
+def in_selectivity(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+
+    selectivity_dict = {}
+    for node in g.nodes():
+        s = g.in_degree(node, weight='weight')
+        k = g.in_degree(node, weight=None)
+        if k > 0:
+            selectivity = s / k
+            selectivity_dict[node] = selectivity
+        else:
+            selectivity_dict[node] = 0
+
+    return selectivity_dict
