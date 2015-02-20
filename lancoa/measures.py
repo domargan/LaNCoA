@@ -297,3 +297,22 @@ def in_ipr(network):
                 inv_part_dict[node] = sum(sum_list)
 
     return inv_part_dict
+
+
+def out_ipr(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+
+    inv_part_dict = {}
+    for node in g.nodes():
+        s = g.out_degree(node, weight='weight')
+        successors = g.successors(node)
+        if (len(successors) == 0 and s == 0):
+            inv_part_dict[node] = 0
+        else:
+            sum_list = []
+            for out_node in successors:
+                a = g.edge[out_node][node]['weight']
+                sum_list.append(math.pow((float(a) / float(s)), 2))
+                inv_part_dict[node] = sum(sum_list)
+
+    return inv_part_dict
