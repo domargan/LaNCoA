@@ -22,7 +22,6 @@ along with LaNCoA.  If not, see <http://www.gnu.org/licenses/>.
 import measures
 import matplotlib.pyplot as plt
 import networkx as nx
-from collections import OrderedDict
 
 
 def selectivity_rank_plot(name, network1, network2=None, network3=None,
