@@ -49,7 +49,8 @@ def selectivity_rank_plot(name, network1, network2=None, network3=None,
             selectivity_sequence = sorted(selectivity, reverse=True)
 
             plt.loglog(selectivity_sequence, 'b-', color=colors[color_idx],
-                       lw=3, alpha=0.7, marker=markers[marker_idx], label=net.rsplit(".", 1)[0])
+                       lw=3, alpha=0.7, marker=markers[marker_idx],
+                       label=net.rsplit(".", 1)[0])
             plt.savefig(figname)
 
             color_idx += 1
