@@ -231,22 +231,13 @@ def entropy_in_selectivity(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    sel_sum = 0
-    selctivity_sequence = []
 
-    for node in g.nodes():
-        s = g.in_degree(node, weight='weight')
-        k = g.in_degree(node, weight=None)
-        if k > 0:
-            selectivity = s / k
-        else:
-            selectivity = 0
-        sel_sum += selectivity
-        selctivity_sequence.append(selectivity)
+    sel_dict = in_selectivity(network)
+    sel_sum = sum(sel_dict.values())
 
-    for selectivity in selctivity_sequence:
-        if selectivity > 0:
-            entropy += ((selectivity / float(sel_sum)) * (math.log(selectivity / float(sel_sum))))
+    for k, v in sel_dict.iteritems():
+        if v > 0:
+            entropy += ((v / float(sel_sum)) * (math.log(v / float(sel_sum))))
 
     entropy = -entropy / math.log(n)
 
@@ -258,22 +249,13 @@ def entropy_out_selectivity(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    sel_sum = 0
-    selctivity_sequence = []
 
-    for node in g.nodes():
-        s = g.out_degree(node, weight='weight')
-        k = g.out_degree(node, weight=None)
-        if k > 0:
-            selectivity = s / k
-        else:
-            selectivity = 0
-        sel_sum += selectivity
-        selctivity_sequence.append(selectivity)
+    sel_dict = out_selectivity(network)
+    sel_sum = sum(sel_dict.values())
 
-    for selectivity in selctivity_sequence:
-        if selectivity > 0:
-            entropy += ((selectivity / float(sel_sum)) * (math.log(selectivity / float(sel_sum))))
+    for k, v in sel_dict.iteritems():
+        if v > 0:
+            entropy += ((v / float(sel_sum)) * (math.log(v / float(sel_sum))))
 
     entropy = -entropy / math.log(n)
 
@@ -285,22 +267,13 @@ def entropy_selectivity(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    sel_sum = 0
-    selctivity_sequence = []
 
-    for node in g.nodes():
-        s = g.degree(node, weight='weight')
-        k = g.degree(node, weight=None)
-        if k > 0:
-            selectivity = s / k
-        else:
-            selectivity = 0
-        sel_sum += selectivity
-        selctivity_sequence.append(selectivity)
+    sel_dict = selectivity(network)
+    sel_sum = sum(sel_dict.values())
 
-    for selectivity in selctivity_sequence:
-        if selectivity > 0:
-            entropy += ((selectivity / float(sel_sum)) * (math.log(selectivity / float(sel_sum))))
+    for k, v in sel_dict.iteritems():
+        if v > 0:
+            entropy += ((v / float(sel_sum)) * (math.log(v / float(sel_sum))))
 
     entropy = -entropy / math.log(n)
 
