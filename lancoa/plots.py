@@ -25,7 +25,8 @@ from collections import OrderedDict
 
 
 def selectivity_rank_plot(name, network1, network2=None, network3=None,
-                          network4=None, network5=None, network6=None, d="undirected"):
+                          network4=None, network5=None, network6=None,
+                          d="undirected"):
     figname = str(name)
 
     colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
