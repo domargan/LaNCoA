@@ -42,10 +42,8 @@ def entropy_in_degree(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    deg_sum = 0
 
-    for i in g.nodes():
-        deg_sum += g.in_degree(i)
+    deg_sum = sum(g.in_degree().values())
 
     for i in g.nodes():
         if g.in_degree(i) > 0:
@@ -61,10 +59,8 @@ def entropy_out_degree(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    deg_sum = 0
 
-    for i in g.nodes():
-        deg_sum += g.out_degree(i)
+    deg_sum = sum(g.out_degree().values())
 
     for i in g.nodes():
         if g.out_degree(i) > 0:
@@ -82,8 +78,7 @@ def entropy_degree(network):
     entropy = 0
     deg_sum = 0
 
-    for i in g.nodes():
-        deg_sum += g.degree(i)
+    deg_sum = sum(g.degree().values())
 
     for i in g.nodes():
         if g.degree(i) > 0:
@@ -99,10 +94,8 @@ def entropy_in_strenght(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    deg_sum = 0
 
-    for i in g.nodes():
-        deg_sum += g.in_degree(i, weight='weight')
+    deg_sum = sum(g.in_degree(weight='weight').values())
 
     for i in g.nodes():
         if g.in_degree(i) > 0:
@@ -118,10 +111,8 @@ def entropy_out_strenght(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    deg_sum = 0
 
-    for i in g.nodes():
-        deg_sum += g.out_degree(i, weight='weight')
+    deg_sum = sum(g.out_degree(weight='weight').values())
 
     for i in g.nodes():
         if g.out_degree(i) > 0:
@@ -137,10 +128,8 @@ def entropy_strenght(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    deg_sum = 0
 
-    for i in g.nodes():
-        deg_sum += g.degree(i, weight='weight')
+    deg_sum = sum(g.degree(weight='weight').values())
 
     for i in g.nodes():
         if g.degree(i) > 0:
