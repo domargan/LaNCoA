@@ -23,6 +23,92 @@ import networkx as nx
 import math
 
 
+def in_selectivity(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+
+    selectivity_dict = {}
+    for node in g.nodes():
+        s = g.in_degree(node, weight='weight')
+        k = g.in_degree(node, weight=None)
+        if k > 0:
+            selectivity = s / k
+            selectivity_dict[node] = selectivity
+        else:
+            selectivity_dict[node] = 0
+
+    return selectivity_dict
+
+
+def out_selectivity(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+
+    selectivity_dict = {}
+    for node in g.nodes():
+        s = g.out_degree(node, weight='weight')
+        k = g.out_degree(node, weight=None)
+        if k > 0:
+            selectivity = s / k
+            selectivity_dict[node] = selectivity
+        else:
+            selectivity_dict[node] = 0
+
+    return selectivity_dict
+
+
+def selectivity(network):
+    g = nx.read_weighted_edgelist(network)
+
+    selectivity_dict = {}
+    for node in g.nodes():
+        s = g.degree(node, weight='weight')
+        k = g.degree(node, weight=None)
+        if k > 0:
+            selectivity = s / k
+            selectivity_dict[node] = selectivity
+        else:
+            selectivity_dict[node] = 0
+
+    return selectivity_dict
+
+
+def in_ipr(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+
+    inv_part_dict = {}
+    for node in g.nodes():
+        s = g.in_degree(node, weight='weight')
+        predcessors = g.predecessors(node)
+        if (len(predcessors) == 0 and s == 0):
+            inv_part_dict[node] = 0
+        else:
+            sum_list = []
+            for in_node in predcessors:
+                a = g.edge[in_node][node]['weight']
+                sum_list.append(math.pow((float(a) / float(s)), 2))
+                inv_part_dict[node] = sum(sum_list)
+
+    return inv_part_dict
+
+
+def out_ipr(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+
+    inv_part_dict = {}
+    for node in g.nodes():
+        s = g.out_degree(node, weight='weight')
+        successors = g.successors(node)
+        if (len(successors) == 0 and s == 0):
+            inv_part_dict[node] = 0
+        else:
+            sum_list = []
+            for out_node in successors:
+                a = g.edge[out_node][node]['weight']
+                sum_list.append(math.pow((float(a) / float(s)), 2))
+                inv_part_dict[node] = sum(sum_list)
+
+    return inv_part_dict
+
+
 def reciprocity(network):
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
 
@@ -219,89 +305,3 @@ def entropy_selectivity(network):
     entropy = -entropy / math.log(n)
 
     return entropy
-
-
-def in_selectivity(network):
-    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
-
-    selectivity_dict = {}
-    for node in g.nodes():
-        s = g.in_degree(node, weight='weight')
-        k = g.in_degree(node, weight=None)
-        if k > 0:
-            selectivity = s / k
-            selectivity_dict[node] = selectivity
-        else:
-            selectivity_dict[node] = 0
-
-    return selectivity_dict
-
-
-def out_selectivity(network):
-    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
-
-    selectivity_dict = {}
-    for node in g.nodes():
-        s = g.out_degree(node, weight='weight')
-        k = g.out_degree(node, weight=None)
-        if k > 0:
-            selectivity = s / k
-            selectivity_dict[node] = selectivity
-        else:
-            selectivity_dict[node] = 0
-
-    return selectivity_dict
-
-
-def selectivity(network):
-    g = nx.read_weighted_edgelist(network)
-
-    selectivity_dict = {}
-    for node in g.nodes():
-        s = g.degree(node, weight='weight')
-        k = g.degree(node, weight=None)
-        if k > 0:
-            selectivity = s / k
-            selectivity_dict[node] = selectivity
-        else:
-            selectivity_dict[node] = 0
-
-    return selectivity_dict
-
-
-def in_ipr(network):
-    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
-
-    inv_part_dict = {}
-    for node in g.nodes():
-        s = g.in_degree(node, weight='weight')
-        predcessors = g.predecessors(node)
-        if (len(predcessors) == 0 and s == 0):
-            inv_part_dict[node] = 0
-        else:
-            sum_list = []
-            for in_node in predcessors:
-                a = g.edge[in_node][node]['weight']
-                sum_list.append(math.pow((float(a) / float(s)), 2))
-                inv_part_dict[node] = sum(sum_list)
-
-    return inv_part_dict
-
-
-def out_ipr(network):
-    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
-
-    inv_part_dict = {}
-    for node in g.nodes():
-        s = g.out_degree(node, weight='weight')
-        successors = g.successors(node)
-        if (len(successors) == 0 and s == 0):
-            inv_part_dict[node] = 0
-        else:
-            sum_list = []
-            for out_node in successors:
-                a = g.edge[out_node][node]['weight']
-                sum_list.append(math.pow((float(a) / float(s)), 2))
-                inv_part_dict[node] = sum(sum_list)
-
-    return inv_part_dict
