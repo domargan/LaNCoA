@@ -120,7 +120,7 @@ def degree_rank_plot(name, network1, network2=None, network3=None,
     plt.clf()
 
 
-def strenght_rank_plot(name, network1, network2=None, network3=None,
+def strengtt_rank_plot(name, network1, network2=None, network3=None,
                           network4=None, network5=None, network6=None,
                           d="undirected"):
     figname = str(name)
