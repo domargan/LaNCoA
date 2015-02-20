@@ -21,6 +21,7 @@ along with LaNCoA.  If not, see <http://www.gnu.org/licenses/>.
 
 import measures
 import matplotlib.pyplot as plt
+import networkx as nx
 from collections import OrderedDict
 
 
@@ -63,6 +64,55 @@ def selectivity_rank_plot(name, network1, network2=None, network3=None,
                 plt.ylabel("out-selectivity")
             elif d == "undirected":
                 plt.ylabel("selectivity")
+
+            plt.legend(loc=1, shadow=True)
+            plt.savefig(figname)
+
+    plt.clf()
+
+
+def degree_rank_plot(name, network1, network2=None, network3=None,
+                          network4=None, network5=None, network6=None,
+                          d="undirected"):
+    figname = str(name)
+
+    colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
+    color_idx = 0
+    markers = ["o", "v", "^", "s", "*", "p"]
+    marker_idx = 0
+
+    networks = [network1, network2, network3, network4, network5, network6]
+
+    for net in networks:
+        if net != None:
+            if d == "in":
+                g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
+                degree_dict = g.in_degree()
+            elif d == "out":
+                g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
+                degree_dict = g.out_degree()
+            elif d == "undirected":
+                g = nx.read_weighted_edgelist(net)
+                degree_dict = g.degree()
+
+            degree = degree_dict.values()
+            degree_sequence = sorted(degree, reverse=True)
+
+            plt.loglog(degree_sequence, 'b-', color=colors[color_idx],
+                       lw=3, alpha=0.7, marker=markers[marker_idx],
+                       label=net.rsplit(".", 1)[0])
+            plt.savefig(figname)
+
+            color_idx += 1
+            marker_idx += 1
+
+            plt.xlabel("rank")
+            if d == "in":
+                plt.ylabel("in-degree")
+            elif d == "out":
+                plt.ylabel("out-degree")
+            elif d == "undirected":
+                plt.ylabel("degree")
 
             plt.legend(loc=1, shadow=True)
             plt.savefig(figname)
