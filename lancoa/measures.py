@@ -78,7 +78,7 @@ def in_ipr(network):
     for node in g.nodes():
         s = g.in_degree(node, weight='weight')
         predcessors = g.predecessors(node)
-        if (len(predcessors) == 0 and s == 0):
+        if len(predcessors) == 0 and s == 0:
             inv_part_dict[node] = 0
         else:
             sum_list = []
@@ -97,7 +97,7 @@ def out_ipr(network):
     for node in g.nodes():
         s = g.out_degree(node, weight='weight')
         successors = g.successors(node)
-        if (len(successors) == 0 and s == 0):
+        if len(successors) == 0 and s == 0:
             inv_part_dict[node] = 0
         else:
             sum_list = []
