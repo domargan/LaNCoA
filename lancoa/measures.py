@@ -246,3 +246,19 @@ def in_selectivity(network):
             selectivity_dict[node] = 0
 
     return selectivity_dict
+
+
+def out_selectivity(network):
+    g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+
+    selectivity_dict = {}
+    for node in g.nodes():
+        s = g.out_degree(node, weight='weight')
+        k = g.out_degree(node, weight=None)
+        if k > 0:
+            selectivity = s / k
+            selectivity_dict[node] = selectivity
+        else:
+            selectivity_dict[node] = 0
+
+    return selectivity_dict
