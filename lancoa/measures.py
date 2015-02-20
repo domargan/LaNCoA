@@ -162,7 +162,6 @@ def entropy_degree(network):
     n = g.number_of_nodes()
 
     entropy = 0
-    deg_sum = 0
 
     deg_sum = sum(g.degree().values())
 
