@@ -28,13 +28,6 @@ def selectivity_rank_plot(name, network1, network2=None, network3=None,
                           network4=None, network5=None, network6=None, d="undirected"):
     figname = str(name)
 
-    if d == "in":
-        ylabel = "in-selectivity"
-    elif d == "out":
-        ylabel = "out-selectivity"
-    elif d == "undirected":
-        ylabel = "selectivity"
-
     colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
     color_idx = 0
     markers = ["o", "v", "^", "s", "*", "p"]
@@ -62,7 +55,13 @@ def selectivity_rank_plot(name, network1, network2=None, network3=None,
             marker_idx += 1
 
             plt.xlabel("rank")
-            plt.ylabel(ylabel)
+            if d == "in":
+                plt.ylabel("in-selectivity")
+            elif d == "out":
+                plt.ylabel("out-selectivity")
+            elif d == "undirected":
+                plt.ylabel("selectivity")
+
             plt.legend(loc=1, shadow=True)
             plt.savefig(figname)
 
