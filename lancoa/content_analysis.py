@@ -99,3 +99,28 @@ def weightiest_edges(network, n=20, d="directed"):
                               str(value[0][1]) + "\t\t" + str(value[1]) + "\n")
             else:
                 break
+
+
+def node_distance(network, node, nodes_file, d="directed", w="weighted"):
+    if d == "directed":
+        g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
+    elif d == "undirected":
+        g = nx.read_weighted_edgelist(network)
+
+    with open(nodes_file, "r", encoding="utf-8") as f:
+        node_list = f.read().splitlines()
+
+    with open(network.rsplit(".", 1)[0] + "_node_distance.txt", "w",
+              encoding="utf-8") as write_f:
+        write_f.write(node + "\t\tDistance\n\n")
+        for n in node_list:
+            if n in g:
+                if nx.has_path(g, node, n) is True:
+                    if w == "unweighted":
+                        write_f.write(n + "\t\t" + str(nx.shortest_path_length(g, source=node, target=n)) + "\n")
+                    elif w == "weighted":
+                        write_f.write(n + "\t\t" + str(nx.dijkstra_path_length(g, node, n)) + "\n")
+                else:
+                    write_f.write(n + "\t\tNOT CONNECTED\n")
+            else:
+                write_f.write(n + "\t\tNOT FOUND\n")
