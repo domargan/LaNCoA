@@ -29,145 +29,75 @@ __copyright__ = "Copyright 2015, Domagoj Margan"
 __license__ = "GPL"
 
 
-def selectivity_rank_plot(name, network1, network2=None, network3=None,
-                          network4=None, network5=None, network6=None,
-                          d="undirected"):
+def draw_rank_plot(name, networks, d="undirected", m="selectivity"):
     figname = str(name)
-
     colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
-    color_idx = 0
     markers = ["o", "v", "^", "s", "*", "p"]
-    marker_idx = 0
+    idx = 0
 
-    networks = [network1, network2, network3, network4, network5, network6]
+    is_array = lambda var: isinstance(var, (list, tuple))
 
-    for net in networks:
-        if net != None:
-            if d == "in":
-                selectivity_dict = measures.in_selectivity(net)
-            elif d == "out":
-                selectivity_dict = measures.out_selectivity(net)
-            elif d == "undirected":
-                selectivity_dict = measures.selectivity(net)
-
-            selectivity = selectivity_dict.values()
-            selectivity_sequence = sorted(selectivity, reverse=True)
-
-            plt.loglog(selectivity_sequence, 'b-', color=colors[color_idx],
-                       lw=3, alpha=0.7, marker=markers[marker_idx],
+    if is_array(networks):
+        for net in networks:
+            measure = measure_dict(net, m, d)
+            measure_sequence = sorted(measure.values(), reverse=True)
+            plt.loglog(measure_sequence, 'b-', color=colors[idx],
+                       lw=3, alpha=0.7, marker=markers[idx],
                        label=net.rsplit(".", 1)[0])
             plt.savefig(figname)
 
-            color_idx += 1
-            marker_idx += 1
+            idx += 1
 
-            plt.xlabel("rank")
-            if d == "in":
-                plt.ylabel("in-selectivity")
-            elif d == "out":
-                plt.ylabel("out-selectivity")
-            elif d == "undirected":
-                plt.ylabel("selectivity")
+    else:
+        measure = measure_dict(networks, m, d)
+        measure_sequence = sorted(measure.values(), reverse=True)
+        plt.loglog(measure_sequence, 'b-', color=colors[0],
+                   lw=3, alpha=0.7, marker=markers[0],
+                   label=networks.rsplit(".", 1)[0])
+        plt.savefig(figname)
 
-            plt.legend(loc=1, shadow=True)
-            plt.savefig(figname)
+    plt.xlabel("rank")
+    if d != "undirected":
+        plt.ylabel(d + "-" + m)
+    else:
+        plt.ylabel(m)
+    plt.legend(loc=1, shadow=True)
+    plt.savefig(figname)
 
     plt.clf()
 
 
-def degree_rank_plot(name, network1, network2=None, network3=None,
-                          network4=None, network5=None, network6=None,
-                          d="undirected"):
-    figname = str(name)
+def measure_dict(net, m="selectivity", d="undirected"):
+    measure = {}
 
-    colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
-    color_idx = 0
-    markers = ["o", "v", "^", "s", "*", "p"]
-    marker_idx = 0
+    if d == "out":
+        if m == "selectivity":
+            measure = measures.out_selectivity(net)
+        elif m == "degree":
+            g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
+            measure = g.out_degree()
+        elif m == "strength":
+            g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
+            measure = g.out_degree(weight='weight')
 
-    networks = [network1, network2, network3, network4, network5, network6]
+    elif d == "in":
+        if m == "selectivity":
+            measure = measures.in_selectivity(net)
+        elif m == "degree":
+            g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
+            measure = g.in_degree()
+        elif m == "strength":
+            g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
+            measure = g.in_degree(weight='weight')
 
-    for net in networks:
-        if net != None:
-            if d == "in":
-                g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
-                degree_dict = g.in_degree()
-            elif d == "out":
-                g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
-                degree_dict = g.out_degree()
-            elif d == "undirected":
-                g = nx.read_weighted_edgelist(net)
-                degree_dict = g.degree()
+    elif d == "undirected":
+        if m == "selectivity":
+            measure = measures.selectivity(net)
+        elif m == "degree":
+            g = nx.read_weighted_edgelist(net)
+            measure = g.degree()
+        elif m == "strength":
+            g = nx.read_weighted_edgelist(net)
+            measure = g.degree(weight='weight')
 
-            degree = degree_dict.values()
-            degree_sequence = sorted(degree, reverse=True)
-
-            plt.loglog(degree_sequence, 'b-', color=colors[color_idx],
-                       lw=3, alpha=0.7, marker=markers[marker_idx],
-                       label=net.rsplit(".", 1)[0])
-            plt.savefig(figname)
-
-            color_idx += 1
-            marker_idx += 1
-
-            plt.xlabel("rank")
-            if d == "in":
-                plt.ylabel("in-degree")
-            elif d == "out":
-                plt.ylabel("out-degree")
-            elif d == "undirected":
-                plt.ylabel("degree")
-
-            plt.legend(loc=1, shadow=True)
-            plt.savefig(figname)
-
-    plt.clf()
-
-
-def strength_rank_plot(name, network1, network2=None, network3=None,
-                          network4=None, network5=None, network6=None,
-                          d="undirected"):
-    figname = str(name)
-
-    colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
-    color_idx = 0
-    markers = ["o", "v", "^", "s", "*", "p"]
-    marker_idx = 0
-
-    networks = [network1, network2, network3, network4, network5, network6]
-
-    for net in networks:
-        if net != None:
-            if d == "in":
-                g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
-                strength_dict = g.in_degree(weight='weight')
-            elif d == "out":
-                g = nx.read_weighted_edgelist(net, create_using=nx.DiGraph())
-                strength_dict = g.out_degree(weight='weight')
-            elif d == "undirected":
-                g = nx.read_weighted_edgelist(net)
-                strength_dict = g.degree(weight='weight')
-
-            strength = strength_dict.values()
-            strength_sequence = sorted(strength, reverse=True)
-
-            plt.loglog(strength_sequence, 'b-', color=colors[color_idx],
-                       lw=3, alpha=0.7, marker=markers[marker_idx],
-                       label=net.rsplit(".", 1)[0])
-            plt.savefig(figname)
-
-            color_idx += 1
-            marker_idx += 1
-
-            plt.xlabel("rank")
-            if d == "in":
-                plt.ylabel("in-strength")
-            elif d == "out":
-                plt.ylabel("out-strength")
-            elif d == "undirected":
-                plt.ylabel("strength")
-
-            plt.legend(loc=1, shadow=True)
-            plt.savefig(figname)
-
-    plt.clf()
+    return measure
