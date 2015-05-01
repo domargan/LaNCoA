@@ -68,8 +68,6 @@ def draw_rank_plot(name, networks, d="undirected", m="selectivity"):
 
 
 def measure_dict(net, m="selectivity", d="undirected"):
-    measure = {}
-
     if d == "out":
         if m == "selectivity":
             measure = measures.out_selectivity(net)
