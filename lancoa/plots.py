@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2015 Domagoj Margan <margan.domagoj@gmail.com>
+Copyright (C) 2015 Tanja Miličić <tanyamilicic@gmail.com>
 
 This file is part of LaNCoA.
 LaNCoA is free software: you can redistribute it and/or modify
@@ -23,9 +23,9 @@ import measures
 import matplotlib.pyplot as plt
 import networkx as nx
 
-__author__ = "Domagoj Margan"
-__email__ = "margan.domagoj@gmail.com"
-__copyright__ = "Copyright 2015, Domagoj Margan"
+__author__ = "Tanja Miličić"
+__email__ = "tanyamilicic@gmail.com"
+__copyright__ = "Copyright 2015, Tanja Miličić"
 __license__ = "GPL"
 
 
@@ -45,9 +45,7 @@ def draw_rank_plot(name, networks, d="undirected", m="selectivity"):
                        lw=3, alpha=0.7, marker=markers[idx],
                        label=net.rsplit(".", 1)[0])
             plt.savefig(figname)
-
             idx += 1
-
     else:
         measure = measure_dict(networks, m, d)
         measure_sequence = sorted(measure.values(), reverse=True)
@@ -56,20 +54,33 @@ def draw_rank_plot(name, networks, d="undirected", m="selectivity"):
                    label=networks.rsplit(".", 1)[0])
         plt.savefig(figname)
 
-    plt.xlabel("rank")
+    plt.ylabel("rank")
     if d != "undirected":
-        plt.ylabel(d + "-" + m)
+        plt.xlabel(d + "-" + m)
     else:
-        plt.ylabel(m)
+        plt.xlabel(m)
     plt.legend(loc=1, shadow=True)
     plt.savefig(figname)
+    plt.clf()
 
+
+def draw_histogram(name, network, d="undirected", m="selectivity"):
+    figname = str(name)
+    measure_sequence = measure_dict(network, m, d).values()
+    plt.hist(measure_sequence, facecolor="blue",
+             alpha=0.75, label=network.rsplit(".", 1)[0])
+    
+    plt.ylabel("nodes")
+    if d != "undirected":
+        plt.xlabel(d + "-" + m)
+    else:
+        plt.xlabel(m)
+    plt.legend(loc=1, shadow=True)
+    plt.savefig(figname)
     plt.clf()
 
 
 def measure_dict(net, m="selectivity", d="undirected"):
-    measure = {}
-
     if d == "out":
         if m == "selectivity":
             measure = measures.out_selectivity(net)
