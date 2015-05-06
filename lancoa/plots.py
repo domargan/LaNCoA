@@ -54,11 +54,11 @@ def draw_rank_plot(name, networks, d="undirected", m="selectivity"):
                    label=networks.rsplit(".", 1)[0])
         plt.savefig(figname)
 
-    plt.ylabel("rank")
+    plt.xlabel("rank")
     if d != "undirected":
-        plt.xlabel(d + "-" + m)
+        plt.ylabel(d + "-" + m)
     else:
-        plt.xlabel(m)
+        plt.ylabel(m)
     plt.legend(loc=1, shadow=True)
     plt.savefig(figname)
     plt.clf()
@@ -69,7 +69,7 @@ def draw_histogram(name, network, d="undirected", m="selectivity"):
     measure_sequence = measure_dict(network, m, d).values()
     plt.hist(measure_sequence, facecolor="blue",
              alpha=0.75, label=network.rsplit(".", 1)[0])
-    
+
     plt.ylabel("nodes")
     if d != "undirected":
         plt.xlabel(d + "-" + m)
