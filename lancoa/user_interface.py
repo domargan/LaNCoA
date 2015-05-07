@@ -85,7 +85,7 @@ class Network(object):
             exit(1)
 
     def __dir__(self):
-        commands = ['coocurrence_net', 'syntax_net']
+        commands = ['coocurrence_net', 'syntax_net', 'syllable_net']
         return commands
 
     def coocurrence_net(self):
@@ -105,6 +105,14 @@ class Network(object):
         parser.add_argument('corpus_file')
         args = parser.parse_args(sys.argv[3:])
         lang_nets.syntax_net(args.corpus_file, args.d, args.w)
+
+    def syllable_net(self):
+        parser = argparse.ArgumentParser(prog='syllable_net',
+                                         parents=[Network.parent_parser])
+        parser.add_argument('corpus_file')
+        parser.add_argument('syllable_list')
+        args = parser.parse_args(sys.argv[3:])
+        lang_nets.syllable_net(args.corpus_file, args.syllable_list, args.d, args.w)
 
 
 class Plot(object):
