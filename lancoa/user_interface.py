@@ -85,7 +85,8 @@ class Network(object):
             exit(1)
 
     def __dir__(self):
-        commands = ['coocurrence_net', 'syntax_net', 'syllable_net', 'grapheme_net']
+        commands = ['coocurrence_net', 'syntax_net', 'syllable_net',
+                    'grapheme_net', 'wordlist_subnet']
         return commands
 
     def coocurrence_net(self):
@@ -120,6 +121,16 @@ class Network(object):
         parser.add_argument('syllable_network')
         args = parser.parse_args(sys.argv[3:])
         lang_nets.grapheme_net(args.syllable_network, args.d, args.w)
+
+    def wordlist_subnet(self):
+        parser = argparse.ArgumentParser(prog='wordlist_subnet',
+                                         parents=[Network.parent_parser])
+        parser.add_argument('word_network')
+        parser.add_argument('word')
+        parser.add_argument('words_file')
+        args = parser.parse_args(sys.argv[3:])
+        lang_nets.wordlist_subnet(args.word_network, args.word,
+                                  args.words_file, args.d, args.w)
 
 
 class Plot(object):
