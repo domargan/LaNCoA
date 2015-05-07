@@ -141,7 +141,6 @@ class Network(object):
                             choices=['successors', 'predecessors', 'all'])
         parser.add_argument('--radius', type=int, default=1)
         args = parser.parse_args(sys.argv[3:])
-        print args
         lang_nets.ego_word_subnet(args.word_network, args.word, args.radius,
                                   args.d, args.w, args.neighborhood)
 
