@@ -28,16 +28,17 @@ __license__ = "GPL"
 import argparse
 import sys
 import plots
+import lang_nets
 
 
 class LaNCoA(object):
 
     def __dir__(self):
-        commands = ['draw_plot']
+        commands = ['draw_plot', 'create']
         return commands
 
     def __init__(self):
-        commands = '\n'.join(dir(self))
+        commands = '\t'.join(dir(self))
         parser = argparse.ArgumentParser(
             add_help=False,
             prog='lancoa.py',
@@ -56,7 +57,54 @@ class LaNCoA(object):
             parser.print_help()
             exit(1)
 
+    def create(self): Network()
     def draw_plot(self): Plot()
+
+
+class Network(object):
+
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('-d', default='directed', choices=['directed', 'undirected'])
+    parent_parser.add_argument('-w', default='weighted', choices=['weighted', 'unweighted'])
+
+    def __init__(self):
+        commands = ' '.join(dir(self))
+        parser = argparse.ArgumentParser(
+            add_help=False,
+            usage='''create [NETWORK] [ARGS]
+
+            Available networks are: ''' + commands
+        )
+        parser.add_argument('command', help="")
+        args = parser.parse_args(sys.argv[2:3])
+        if hasattr(self, args.command):
+            getattr(self, args.command)()
+        else:
+            print 'Unrecognized command'
+            parser.print_help()
+            exit(1)
+
+    def __dir__(self):
+        commands = ['coocurrence_net', 'syntax_net']
+        return commands
+
+    def coocurrence_net(self):
+        parser = argparse.ArgumentParser(prog='coocurrence_net',
+                                         parents=[Network.parent_parser])
+        parser.add_argument('corpus_file')
+        parser.add_argument('delimiters', nargs='+')
+        parser.add_argument('--window', type=int, default=1)
+        parser.add_argument('--lower', default='Yes', choices=['Yes', 'No'])
+        args = parser.parse_args(sys.argv[3:])
+        lang_nets.cooccurrence_net(args.corpus_file, list(args.delimiters),
+                                   args.d, args.w, args.window, args.lower)
+
+    def syntax_net(self):
+        parser = argparse.ArgumentParser(prog='syntax_net',
+                                         parents=[Network.parent_parser])
+        parser.add_argument('corpus_file')
+        args = parser.parse_args(sys.argv[3:])
+        lang_nets.syntax_net(args.corpus_file, args.d, args.w)
 
 
 class Plot(object):
