@@ -87,7 +87,8 @@ class Corpora(object):
             exit(1)
 
     def __dir__(self):
-        commands = ['remove_stopwords', 'lemmatize', 'clean_corpus']
+        commands = ['remove_stopwords', 'lemmatize',
+                    'clean_corpus', 'shuffle_corpus']
         return commands
 
     def remove_stopwords(self):
@@ -118,6 +119,16 @@ class Corpora(object):
         args = parser.parse_args(sys.argv[3:])
         text_corpora.clean_corpus(args.corpus_file, args.preserve_list,
                                   args.nfkd, args.split, args.replace)
+
+    def shuffle_corpus(self):
+        parser = argparse.ArgumentParser(prog='shuffle_corpus',
+                                         parents=[Corpora.parent_parser])
+        parser.add_argument('delimiters')
+        parser.add_argument('node')
+        parser.add_argument('end_sign')
+        args = parser.parse_args(sys.argv[3:])
+        text_corpora.shuffle_corpus(args.corpus_file, args.delimiters,
+                                    args.node, args.end_sign)
 
 
 class Network(object):
