@@ -29,12 +29,13 @@ import argparse
 import sys
 import plots
 import lang_nets
+import text_corpora
 
 
 class LaNCoA(object):
 
     def __dir__(self):
-        commands = ['draw_plot', 'create']
+        commands = ['draw_plot', 'create', 'corpora']
         return commands
 
     def __init__(self):
@@ -57,8 +58,45 @@ class LaNCoA(object):
             parser.print_help()
             exit(1)
 
+    def corpora(self): Corpora()
     def create(self): Network()
     def draw_plot(self): Plot()
+
+
+class Corpora(object):
+
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('corpora_file')
+
+    def __init__(self):
+        commands = ' '.join(dir(self))
+        parser = argparse.ArgumentParser(
+            add_help=False,
+            usage='''corpora [COMMAND] [ARGS]
+
+            Available corpora manipulation commands are:
+            ''' + commands
+        )
+        parser.add_argument('command', help='')
+        args = parser.parse_args(sys.argv[2:3])
+        if hasattr(self, args.command):
+            getattr(self, args.command)()
+        else:
+            print 'Unrecognized command'
+            parser.print_help()
+            exit(1)
+
+    def __dir__(self):
+        commands = ['remove_stopwords']
+        return commands
+
+    def remove_stopwords(self):
+        parser = argparse.ArgumentParser(prog='remove_stopwords',
+                                         parents=[Corpora.parent_parser])
+        parser.add_argument('delimiters')
+        parser.add_argument('stopwords_file')
+        args = parser.parse_args(sys.argv[3:])
+        text_corpora.remove_stopwords(args.corpora_file, args.delimiters, args.stopwords_file)
 
 
 class Network(object):
