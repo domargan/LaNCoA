@@ -170,7 +170,7 @@ class Plot(object):
             exit(1)
 
     def __dir__(self):
-        commands = ['rankplot', 'histogram']
+        commands = ['rankplot', 'histogram', 'scatterplot']
         return commands
 
     def rankplot(self):
@@ -184,3 +184,13 @@ class Plot(object):
         parser.add_argument('network')
         args = parser.parse_args(sys.argv[3:])
         plots.draw_histogram(args.name, args.network, args.d, args.m)
+
+    def scatterplot(self):
+        parser = argparse.ArgumentParser(prog='scatterplot')
+        parser.add_argument('name')
+        parser.add_argument('networks', nargs='+')
+        parser.add_argument('-d', default='in', choices=['in', 'out', 'undirected'])
+        parser.add_argument('-y', default='degree', choices=['degree', 'selectivity', 'strength'])
+        parser.add_argument('-x', default='strength', choices=['degree', 'selectivity', 'strength'])
+        args = parser.parse_args(sys.argv[3:])
+        plots.draw_scatterplot(args.name, args.networks, args.d, args.x, args.y)
