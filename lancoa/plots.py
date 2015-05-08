@@ -79,6 +79,39 @@ def draw_histogram(name, network, d="undirected", m="selectivity"):
     plt.savefig(figname)
     plt.clf()
 
+def draw_scatterplot(name, networks, d="undirected", xm="selectivity", ym="strength"):
+    figname = str(name)
+    colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
+    area = 30
+    idx = 0
+
+    is_array = lambda var: isinstance(var, (list, tuple))
+
+    if is_array(networks):
+        for net in networks:
+            x = measure_dict(net, xm, d).values()
+            y = measure_dict(net, ym, d).values()
+            plt.scatter(x, y, s=area, c=colors[idx], alpha=0.7,
+                        label=net.rsplit(".", 1)[0])
+            plt.savefig(figname)
+            idx += 1
+    else:
+        x = measure_dict(networks, xm, d).values()
+        y = measure_dict(networks, ym, d).values()
+        plt.scatter(x, y, s=area, c=colors[0], alpha=0.7,
+                    label=networks.rsplit(".", 1)[0])
+        plt.savefig(figname)
+
+    if d != "undirected":
+        plt.ylabel(d + "-" + ym)
+        plt.xlabel(d + "-" + xm)
+    else:
+        plt.ylabel(ym)
+        plt.xlabel(xm)
+    plt.legend(loc=1, shadow=True)
+    plt.savefig(figname)
+    plt.clf()
+
 
 def measure_dict(net, m="selectivity", d="undirected"):
     if d == "out":

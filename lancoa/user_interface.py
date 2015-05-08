@@ -29,12 +29,13 @@ import argparse
 import sys
 import plots
 import lang_nets
+import text_corpora
 
 
 class LaNCoA(object):
 
     def __dir__(self):
-        commands = ['draw_plot', 'create']
+        commands = ['draw_plot', 'create', 'corpora']
         return commands
 
     def __init__(self):
@@ -57,8 +58,77 @@ class LaNCoA(object):
             parser.print_help()
             exit(1)
 
+    def corpora(self): Corpora()
     def create(self): Network()
     def draw_plot(self): Plot()
+
+
+class Corpora(object):
+
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('corpora_file')
+
+    def __init__(self):
+        commands = ' '.join(dir(self))
+        parser = argparse.ArgumentParser(
+            add_help=False,
+            usage='''corpora [COMMAND] [ARGS]
+
+            Available corpora manipulation commands are:
+            ''' + commands
+        )
+        parser.add_argument('command', help='')
+        args = parser.parse_args(sys.argv[2:3])
+        if hasattr(self, args.command):
+            getattr(self, args.command)()
+        else:
+            print 'Unrecognized command'
+            parser.print_help()
+            exit(1)
+
+    def __dir__(self):
+        commands = ['remove_stopwords', 'lemmatize',
+                    'clean_corpus', 'shuffle_corpus']
+        return commands
+
+    def remove_stopwords(self):
+        parser = argparse.ArgumentParser(prog='remove_stopwords',
+                                         parents=[Corpora.parent_parser])
+        parser.add_argument('delimiters')
+        parser.add_argument('stopwords_file')
+        args = parser.parse_args(sys.argv[3:])
+        text_corpora.remove_stopwords(args.corpora_file, args.delimiters, args.stopwords_file)
+
+    def lemmatize(self):
+        parser = argparse.ArgumentParser(prog='lemmatize',
+                                         parents=[Corpora.parent_parser])
+        parser.add_argument('delimiters')
+        parser.add_argument('lemmas_file')
+        parser.add_argument('lemma_splitter')
+        args = parser.parse_args(sys.argv[3:])
+        text_corpora.lemmatize(args.corpus_file, args.delimiters,
+                               args.lemmas_file, args.lemma_splitter)
+
+    def clean_corpus(self):
+        parser = argparse.ArgumentParser(prog='clean_corpus',
+                                         parents=[Corpora.parent_parser])
+        parser.add_argument('preserve_list', default='None', nargs='+')
+        parser.add_argument('--nfdk', default='No', choices=['Yes', 'No'])
+        parser.add_argument('--split', default='No', choices=['Yes', 'No'])
+        parser.add_argument('--replace', default='')
+        args = parser.parse_args(sys.argv[3:])
+        text_corpora.clean_corpus(args.corpus_file, args.preserve_list,
+                                  args.nfkd, args.split, args.replace)
+
+    def shuffle_corpus(self):
+        parser = argparse.ArgumentParser(prog='shuffle_corpus',
+                                         parents=[Corpora.parent_parser])
+        parser.add_argument('delimiters')
+        parser.add_argument('node')
+        parser.add_argument('end_sign')
+        args = parser.parse_args(sys.argv[3:])
+        text_corpora.shuffle_corpus(args.corpus_file, args.delimiters,
+                                    args.node, args.end_sign)
 
 
 class Network(object):
@@ -170,7 +240,7 @@ class Plot(object):
             exit(1)
 
     def __dir__(self):
-        commands = ['rankplot', 'histogram']
+        commands = ['rankplot', 'histogram', 'scatterplot']
         return commands
 
     def rankplot(self):
@@ -184,3 +254,13 @@ class Plot(object):
         parser.add_argument('network')
         args = parser.parse_args(sys.argv[3:])
         plots.draw_histogram(args.name, args.network, args.d, args.m)
+
+    def scatterplot(self):
+        parser = argparse.ArgumentParser(prog='scatterplot')
+        parser.add_argument('name')
+        parser.add_argument('networks', nargs='+')
+        parser.add_argument('-d', default='in', choices=['in', 'out', 'undirected'])
+        parser.add_argument('-y', default='degree', choices=['degree', 'selectivity', 'strength'])
+        parser.add_argument('-x', default='strength', choices=['degree', 'selectivity', 'strength'])
+        args = parser.parse_args(sys.argv[3:])
+        plots.draw_scatterplot(args.name, args.networks, args.d, args.x, args.y)
