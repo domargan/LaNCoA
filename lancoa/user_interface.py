@@ -30,6 +30,7 @@ import sys
 import plots
 import lang_nets
 import text_corpora
+import measures
 
 
 class LaNCoA(object):
@@ -238,6 +239,12 @@ class Measure(object):
     def __dir__(self):
         commands = []
         return commands
+
+    def reciprocity(self):
+        parser = argparse.ArgumentParser(prog='reciprocity',
+                                         parents=[Measure.parent_parser])
+        args = parser.parse_args(sys.argv[3:])
+        print measures.reciprocity(args.network)
 
 
 class Plot(object):
