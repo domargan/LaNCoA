@@ -35,7 +35,7 @@ import text_corpora
 class LaNCoA(object):
 
     def __dir__(self):
-        commands = ['draw_plot', 'create', 'corpora']
+        commands = ['draw_plot', 'create', 'corpora', 'calculate']
         return commands
 
     def __init__(self):
@@ -60,6 +60,7 @@ class LaNCoA(object):
 
     def corpora(self): Corpora()
     def create(self): Network()
+    def calculate(self): Measure()
     def draw_plot(self): Plot()
 
 
@@ -213,6 +214,30 @@ class Network(object):
         args = parser.parse_args(sys.argv[3:])
         lang_nets.ego_word_subnet(args.word_network, args.word, args.radius,
                                   args.d, args.w, args.neighborhood)
+
+
+class Measure(object):
+
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('network')
+
+    def __init__(self):
+        parser = argparse.ArgumentParser(
+            add_help=False,
+            usage='''calculate [MEASURE] [ARGS]'''
+        )
+        parser.add_argument('command')
+        args = parser.parse_args(sys.argv[2:3])
+        if hasattr(self, args.command):
+            getattr(self, args.command)()
+        else:
+            print 'Unrecognized command'
+            parser.print_help()
+            exit(1)
+
+    def __dir__(self):
+        commands = []
+        return commands
 
 
 class Plot(object):
