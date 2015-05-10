@@ -31,6 +31,7 @@ import plots
 import lang_nets
 import text_corpora
 import measures
+import overlaps
 
 
 class LaNCoA(object):
@@ -240,7 +241,8 @@ class Measure(object):
             exit(1)
 
     def __dir__(self):
-        commands = ['reciprocity', 'entropy']
+        commands = ['reciprocity', 'entropy', 'jaccard', 'total_overlap',
+                    'total_weighted_overlap']
         return commands
 
     def reciprocity(self):
@@ -266,6 +268,30 @@ class Measure(object):
             args.measure = measures.out_ipr(args.network)
 
         print measures.entropy(measure_dict)
+
+    def jaccard(self):
+        parser = argparse.ArgumentParser(prog='jaccard',
+                                         parents=[Measure.parent_parser])
+        parser.add_argument('network2')
+        parser.add_argument('-d', default='directed', choices=['directed', 'undirected'])
+        args = parser.parse_args(sys.argv[3:])
+        print overlaps.jaccard(args.network, args.network2, args.d)
+
+    def total_overlap(self):
+        parser = argparse.ArgumentParser(prog='total_overlap',
+                                         parents=[Measure.parent_parser])
+        parser.add_argument('network2')
+        parser.add_argument('-d', default='directed', choices=['directed', 'undirected'])
+        args = parser.parse_args(sys.argv[3:])
+        print overlaps.total_overlap(args.network, args.network2, args.d)
+
+    def total_weighted_overlap(self):
+        parser = argparse.ArgumentParser(prog='total_weighted_overlap',
+                                         parents=[Measure.parent_parser])
+        parser.add_argument('network2')
+        parser.add_argument('-d', default='directed', choices=['directed', 'undirected'])
+        args = parser.parse_args(sys.argv[3:])
+        print overlaps.total_weighted_overlap(args.network, args.network2, args.d)
 
 
 class Plot(object):
