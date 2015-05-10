@@ -223,9 +223,12 @@ class Measure(object):
     parent_parser.add_argument('network')
 
     def __init__(self):
+        commands = ' '.join(dir(self))
         parser = argparse.ArgumentParser(
             add_help=False,
-            usage='''calculate [MEASURE] [ARGS]'''
+            usage='''calculate [MEASURE] [ARGS]
+
+            Available measures are: ''' + commands
         )
         parser.add_argument('command')
         args = parser.parse_args(sys.argv[2:3])
@@ -237,7 +240,7 @@ class Measure(object):
             exit(1)
 
     def __dir__(self):
-        commands = []
+        commands = ['reciprocity', 'entropy']
         return commands
 
     def reciprocity(self):
@@ -245,6 +248,24 @@ class Measure(object):
                                          parents=[Measure.parent_parser])
         args = parser.parse_args(sys.argv[3:])
         print measures.reciprocity(args.network)
+
+    def entropy(self):
+        parser = argparse.ArgumentParser(prog='entropy',
+                                         parents=[Measure.parent_parser])
+        parser.add_argument('measure')
+        args = parser.parse_args(sys.argv[3:])
+        if args.measure == 'in_selectivity':
+            measure_dict = measures.in_selectivity(args.network)
+        elif args.measure == 'out_selectivity':
+            measure_dict = measures.out_selectivity(args.network)
+        elif args.measure == 'selectivity':
+            measure_dict = measures.selectivity(args.network)
+        elif args.measure == 'in_ipr':
+            measure_dict = measures.in_ipr(args.network)
+        elif args.measure == 'out_ipr':
+            args.measure = measures.out_ipr(args.network)
+
+        print measures.entropy(measure_dict)
 
 
 class Plot(object):
