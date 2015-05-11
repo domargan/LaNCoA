@@ -30,12 +30,16 @@ import sys
 import plots
 import lang_nets
 import text_corpora
+import measures
+import overlaps
+import content_analysis
 
 
 class LaNCoA(object):
 
     def __dir__(self):
-        commands = ['draw_plot', 'create', 'corpora']
+        commands = ['draw_plot', 'create', 'corpora',
+                    'calculate', 'analyse']
         return commands
 
     def __init__(self):
@@ -60,6 +64,8 @@ class LaNCoA(object):
 
     def corpora(self): Corpora()
     def create(self): Network()
+    def analyse(self): Content()
+    def calculate(self): Measure()
     def draw_plot(self): Plot()
 
 
@@ -213,6 +219,137 @@ class Network(object):
         args = parser.parse_args(sys.argv[3:])
         lang_nets.ego_word_subnet(args.word_network, args.word, args.radius,
                                   args.d, args.w, args.neighborhood)
+
+
+class Content(object):
+
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('network')
+    parent_parser.add_argument('-d', default='directed',
+                               choices=['directed', 'undirected'])
+
+    def __init__(self):
+        commands = ' '.join(dir(self))
+        parser = argparse.ArgumentParser(
+            add_help=False,
+            usage='''analyse [COMMAND] [ARGS]
+
+            Available commands are:
+            ''' + commands
+        )
+        parser.add_argument('command')
+        args = parser.parse_args(sys.argv[2:3])
+        if hasattr(self, args.command):
+            getattr(self, args.command)()
+        else:
+            print 'Unrecognized command'
+            parser.print_help()
+            exit(1)
+
+    def __dir__(self):
+        commands = ['hubs', 'weightiest_edges', 'node_distance']
+        return commands
+
+    def hubs(self):
+        parser = argparse.ArgumentParser(prog='hubs',
+                                         parents=[Content.parent_parser])
+        parser.add_argument('-n', type=int, default=20)
+        args = parser.parse_args(sys.argv[3:])
+        content_analysis.hubs(args.network, args.n, args.d)
+
+    def weightiest_edges(self):
+        parser = argparse.ArgumentParser(prog='weightiest_edges',
+                                         parents=[Content.parent_parser])
+        parser.add_argument('-n', type=int, default=20)
+        args = parser.parse_args(sys.argv[3:])
+        content_analysis.weightiest_edges(args.network, args.n, args.d)
+
+    def node_distance(self):
+        parser = argparse.ArgumentParser(prog='node_distance',
+                                         parents=[Content.parent_parser])
+        parser.add_argument('node')
+        parser.add_argument('nodes_file')
+        parser.add_argument('-w', default='weighted',
+                            choices=['weighted', 'unweighted'])
+        args = parser.parse_args(sys.argv[3:])
+        content_analysis.node_distance(args.network, args.node,
+                                       args.nodes_file, args.d, args.w)
+
+
+class Measure(object):
+
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('network')
+
+    def __init__(self):
+        commands = ' '.join(dir(self))
+        parser = argparse.ArgumentParser(
+            add_help=False,
+            usage='''calculate [MEASURE] [ARGS]
+
+            Available measures are: ''' + commands
+        )
+        parser.add_argument('command')
+        args = parser.parse_args(sys.argv[2:3])
+        if hasattr(self, args.command):
+            getattr(self, args.command)()
+        else:
+            print 'Unrecognized command'
+            parser.print_help()
+            exit(1)
+
+    def __dir__(self):
+        commands = ['reciprocity', 'entropy', 'jaccard', 'total_overlap',
+                    'total_weighted_overlap']
+        return commands
+
+    def reciprocity(self):
+        parser = argparse.ArgumentParser(prog='reciprocity',
+                                         parents=[Measure.parent_parser])
+        args = parser.parse_args(sys.argv[3:])
+        print measures.reciprocity(args.network)
+
+    def entropy(self):
+        parser = argparse.ArgumentParser(prog='entropy',
+                                         parents=[Measure.parent_parser])
+        parser.add_argument('measure')
+        args = parser.parse_args(sys.argv[3:])
+        if args.measure == 'in_selectivity':
+            measure_dict = measures.in_selectivity(args.network)
+        elif args.measure == 'out_selectivity':
+            measure_dict = measures.out_selectivity(args.network)
+        elif args.measure == 'selectivity':
+            measure_dict = measures.selectivity(args.network)
+        elif args.measure == 'in_ipr':
+            measure_dict = measures.in_ipr(args.network)
+        elif args.measure == 'out_ipr':
+            args.measure = measures.out_ipr(args.network)
+
+        print measures.entropy(measure_dict)
+
+    def jaccard(self):
+        parser = argparse.ArgumentParser(prog='jaccard',
+                                         parents=[Measure.parent_parser])
+        parser.add_argument('network2')
+        parser.add_argument('-d', default='directed', choices=['directed', 'undirected'])
+        args = parser.parse_args(sys.argv[3:])
+        print overlaps.jaccard(args.network, args.network2, args.d)
+
+    def total_overlap(self):
+        parser = argparse.ArgumentParser(prog='total_overlap',
+                                         parents=[Measure.parent_parser])
+        parser.add_argument('network2')
+        parser.add_argument('-d', default='directed', choices=['directed', 'undirected'])
+        args = parser.parse_args(sys.argv[3:])
+        print overlaps.total_overlap(args.network, args.network2, args.d)
+
+    def total_weighted_overlap(self):
+        parser = argparse.ArgumentParser(prog='total_weighted_overlap',
+                                         parents=[Measure.parent_parser])
+        parser.add_argument('network2')
+        parser.add_argument('-d', default='directed', choices=['directed', 'undirected'])
+        args = parser.parse_args(sys.argv[3:])
+        print overlaps.total_weighted_overlap(args.network, args.network2, args.d)
 
 
 class Plot(object):
