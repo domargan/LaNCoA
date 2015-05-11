@@ -32,12 +32,14 @@ import lang_nets
 import text_corpora
 import measures
 import overlaps
+import content_analysis
 
 
 class LaNCoA(object):
 
     def __dir__(self):
-        commands = ['draw_plot', 'create', 'corpora', 'calculate']
+        commands = ['draw_plot', 'create', 'corpora',
+                    'calculate', 'analyse']
         return commands
 
     def __init__(self):
@@ -62,6 +64,7 @@ class LaNCoA(object):
 
     def corpora(self): Corpora()
     def create(self): Network()
+    def analyse(self): Content()
     def calculate(self): Measure()
     def draw_plot(self): Plot()
 
@@ -216,6 +219,61 @@ class Network(object):
         args = parser.parse_args(sys.argv[3:])
         lang_nets.ego_word_subnet(args.word_network, args.word, args.radius,
                                   args.d, args.w, args.neighborhood)
+
+
+class Content(object):
+
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('network')
+    parent_parser.add_argument('-d', default='directed',
+                               choices=['directed', 'undirected'])
+
+    def __init__(self):
+        commands = ' '.join(dir(self))
+        parser = argparse.ArgumentParser(
+            add_help=False,
+            usage='''analyse [COMMAND] [ARGS]
+
+            Available commands are:
+            ''' + commands
+        )
+        parser.add_argument('command')
+        args = parser.parse_args(sys.argv[2:3])
+        if hasattr(self, args.command):
+            getattr(self, args.command)()
+        else:
+            print 'Unrecognized command'
+            parser.print_help()
+            exit(1)
+
+    def __dir__(self):
+        commands = ['hubs', 'weightiest_edges', 'node_distance']
+        return commands
+
+    def hubs(self):
+        parser = argparse.ArgumentParser(prog='hubs',
+                                         parents=[Content.parent_parser])
+        parser.add_argument('-n', type=int, default=20)
+        args = parser.parse_args(sys.argv[3:])
+        content_analysis.hubs(args.network, args.n, args.d)
+
+    def weightiest_edges(self):
+        parser = argparse.ArgumentParser(prog='weightiest_edges',
+                                         parents=[Content.parent_parser])
+        parser.add_argument('-n', type=int, default=20)
+        args = parser.parse_args(sys.argv[3:])
+        content_analysis.weightiest_edges(args.network, args.n, args.d)
+
+    def node_distance(self):
+        parser = argparse.ArgumentParser(prog='node_distance',
+                                         parents=[Content.parent_parser])
+        parser.add_argument('node')
+        parser.add_argument('nodes_file')
+        parser.add_argument('-w', default='weighted',
+                            choices=['weighted', 'unweighted'])
+        args = parser.parse_args(sys.argv[3:])
+        content_analysis.node_distance(args.network, args.node,
+                                       args.nodes_file, args.d, args.w)
 
 
 class Measure(object):
