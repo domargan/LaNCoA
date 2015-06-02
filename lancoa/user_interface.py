@@ -119,11 +119,11 @@ class Corpora(object):
         parser = argparse.ArgumentParser(prog='clean_corpus',
                                          parents=[Corpora.parent_parser])
         parser.add_argument('preserve_list', default='None', nargs='+')
-        parser.add_argument('--nfdk', default='No', choices=['Yes', 'No'])
+        parser.add_argument('--nfkd', default='No', choices=['Yes', 'No'])
         parser.add_argument('--split', default='No', choices=['Yes', 'No'])
         parser.add_argument('--replace', default='')
         args = parser.parse_args(sys.argv[3:])
-        text_corpora.clean_corpus(args.corpus_file, args.preserve_list,
+        text_corpora.clean_corpus(args.corpora_file, args.preserve_list,
                                   args.nfkd, args.split, args.replace)
 
     def shuffle_corpus(self):
