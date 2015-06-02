@@ -29,7 +29,18 @@ __license__ = "GPL"
 
 def remove_stopwords(corpus_file, delimiter_list, stopwords_file):
     # TODO: Make it work for word.strip("\"'`.!?;:,*")
+    """Remove stopwords from text file and save result in new file.
+    Examples of stopwords are: 'is', 'but', 'and', 'some', 'any'...
 
+    Parameters
+    ----------
+        corpus_file: file
+            original text file from which stopwords will be removed
+        delimiter_list: list
+            list of delimiters
+        stopwords_file: file
+            file containing the list of stopwords
+    """
     punct_split_dict = {d: d + " " for d in delimiter_list}
 
     with open(corpus_file, "r", encoding="utf-8") as f:
@@ -61,7 +72,28 @@ def remove_stopwords(corpus_file, delimiter_list, stopwords_file):
 
 def lemmatize(corpus_file, delimiter_list, lemmas_file, lemma_splitter):
     # TODO: Make it work for word.strip("\"'`.!?;:,*")
+    """Group together the different inflected forms of a
+    word into a single item.
 
+    For instance words: cars, car's, cars' are converted
+    into its standard form car.
+
+    Lemmatization in LaNCoA is based on find-and-replace principle.
+
+    Parameters
+    ----------
+        corpus_file: file
+            original text file on which lemmatization
+            process will be applied
+        delimiter_list: list
+            list of delimiters
+        lemmas_file: file
+            file containing the list of all word
+            form-lemma pairs
+        lemma_splitter: char
+            char that splits word form-lemma pair in lemmas_file,
+            e.g. '\t', ' '
+    """
     punct_split_dict = {d: d + " " for d in delimiter_list}
     with open(corpus_file, "r", encoding="utf-8") as f:
         f_r = f.read()
@@ -108,6 +140,35 @@ def lemmatize(corpus_file, delimiter_list, lemmas_file, lemma_splitter):
 
 def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
                  replace_char=""):
+    """Clean text file from unwanted characters or
+    data and save results in new file.
+
+    All UTF-8 characters which are not defined as
+    letters or numbers of the classical Latin alphabet
+    will be removed from textual corpus.
+
+    The NFKD unicode normalization of all Latin
+    script letters can optionally be preformed directly
+    in the process of cleaning.
+
+    Parameters
+    ----------
+        corpus: file
+            original text file for text cleaning
+        preserve_list: list
+            list of interpunctions
+        nfkd: Yes or No (default="No")
+            if selected choice is Yes than the normal form NFKD
+            will replace all compatibility characters with their
+            equivalent.
+        split: Yes or No (default="No")
+            if selected choice is Yes than an empty char behind
+            all interpunctions from preserve_list will be added
+            in text file
+        replace_char: char
+            character that will replace all unwanted characters in file
+
+    """
     from unicodedata import normalize
 
     if not preserve_list:
@@ -163,6 +224,29 @@ def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
 
 
 def shuffle_corpus(corpus, delimiter_list, mode, end_sign):
+    """Randomize words in the text, transforming the text
+    into the meaningless form.
+
+    Two different shuffling principles are implemented:
+    shuffling on the sentence level and
+    shuffling on the whole text level.
+
+    In the text-level shuffling, the original text is
+    randomized by shuffling the words and punctuation
+    marks over the whole text.
+
+    Parameters
+    ----------
+        corpus: file
+            original file on which shuffling
+            procedure will be applied
+        delimiter_list: list
+            list of delimiters
+        mode: sentence or text
+            shuffling principles
+        end_sign: char
+            character that will mark end of a sentence
+    """
     from re import split as re_split
     from random import shuffle
     from random import randint
