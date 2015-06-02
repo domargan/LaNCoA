@@ -108,11 +108,11 @@ class Corpora(object):
     def lemmatize(self):
         parser = argparse.ArgumentParser(prog='lemmatize',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('delimiters')
+        parser.add_argument('--delimiters', default='.,;:!?')
         parser.add_argument('lemmas_file')
-        parser.add_argument('lemma_splitter')
+        parser.add_argument('--lemma_splitter', default='\t')
         args = parser.parse_args(sys.argv[3:])
-        text_corpora.lemmatize(args.corpus_file, args.delimiters,
+        text_corpora.lemmatize(args.corpora_file, args.delimiters,
                                args.lemmas_file, args.lemma_splitter)
 
     def clean_corpus(self):
@@ -133,7 +133,7 @@ class Corpora(object):
         parser.add_argument('node')
         parser.add_argument('end_sign')
         args = parser.parse_args(sys.argv[3:])
-        text_corpora.shuffle_corpus(args.corpus_file, args.delimiters,
+        text_corpora.shuffle_corpus(args.corpora_file, args.delimiters,
                                     args.node, args.end_sign)
 
 
