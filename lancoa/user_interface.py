@@ -100,7 +100,8 @@ class Corpora(object):
     def remove_stopwords(self):
         parser = argparse.ArgumentParser(prog='remove_stopwords',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('delimiters')
+        parser.add_argument('--delimiters', default=['.', ',', ';', ':', '!', '?'],
+                            nargs='+')
         parser.add_argument('stopwords_file')
         args = parser.parse_args(sys.argv[3:])
         text_corpora.remove_stopwords(args.corpora_file, args.delimiters, args.stopwords_file)
@@ -108,7 +109,8 @@ class Corpora(object):
     def lemmatize(self):
         parser = argparse.ArgumentParser(prog='lemmatize',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('--delimiters', default='.,;:!?')
+        parser.add_argument('--delimiters', default=['.', ',', ';', ':', '!', '?'],
+                            nargs='+')
         parser.add_argument('lemmas_file')
         parser.add_argument('--lemma_splitter', default='\t')
         args = parser.parse_args(sys.argv[3:])
@@ -129,12 +131,13 @@ class Corpora(object):
     def shuffle_corpus(self):
         parser = argparse.ArgumentParser(prog='shuffle_corpus',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('delimiters')
-        parser.add_argument('node')
+        parser.add_argument('--delimiters', default=['.', ',', ';', ':', '!', '?'],
+                            nargs='+')
+        parser.add_argument('mode', choices=['sentence', 'text'])
         parser.add_argument('end_sign')
         args = parser.parse_args(sys.argv[3:])
         text_corpora.shuffle_corpus(args.corpora_file, args.delimiters,
-                                    args.node, args.end_sign)
+                                    args.mode, args.end_sign)
 
 
 class Network(object):
