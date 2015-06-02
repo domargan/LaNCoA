@@ -118,7 +118,7 @@ class Corpora(object):
     def clean_corpus(self):
         parser = argparse.ArgumentParser(prog='clean_corpus',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('preserve_list', default='None', nargs='+')
+        parser.add_argument('--preserve_list', default='None', nargs='+')
         parser.add_argument('--nfkd', default='No', choices=['Yes', 'No'])
         parser.add_argument('--split', default='No', choices=['Yes', 'No'])
         parser.add_argument('--replace', default='')
