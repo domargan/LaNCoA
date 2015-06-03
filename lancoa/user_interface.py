@@ -100,7 +100,8 @@ class Corpora(object):
     def remove_stopwords(self):
         parser = argparse.ArgumentParser(prog='remove_stopwords',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('delimiters')
+        parser.add_argument('--delimiters', default=['.', ',', ';', ':', '!', '?'],
+                            nargs='+')
         parser.add_argument('stopwords_file')
         args = parser.parse_args(sys.argv[3:])
         text_corpora.remove_stopwords(args.corpora_file, args.delimiters, args.stopwords_file)
@@ -108,33 +109,35 @@ class Corpora(object):
     def lemmatize(self):
         parser = argparse.ArgumentParser(prog='lemmatize',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('delimiters')
+        parser.add_argument('--delimiters', default=['.', ',', ';', ':', '!', '?'],
+                            nargs='+')
         parser.add_argument('lemmas_file')
-        parser.add_argument('lemma_splitter')
+        parser.add_argument('--lemma_splitter', default='\t')
         args = parser.parse_args(sys.argv[3:])
-        text_corpora.lemmatize(args.corpus_file, args.delimiters,
+        text_corpora.lemmatize(args.corpora_file, args.delimiters,
                                args.lemmas_file, args.lemma_splitter)
 
     def clean_corpus(self):
         parser = argparse.ArgumentParser(prog='clean_corpus',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('preserve_list', default='None', nargs='+')
-        parser.add_argument('--nfdk', default='No', choices=['Yes', 'No'])
+        parser.add_argument('--preserve_list', default='None', nargs='+')
+        parser.add_argument('--nfkd', default='No', choices=['Yes', 'No'])
         parser.add_argument('--split', default='No', choices=['Yes', 'No'])
         parser.add_argument('--replace', default='')
         args = parser.parse_args(sys.argv[3:])
-        text_corpora.clean_corpus(args.corpus_file, args.preserve_list,
+        text_corpora.clean_corpus(args.corpora_file, args.preserve_list,
                                   args.nfkd, args.split, args.replace)
 
     def shuffle_corpus(self):
         parser = argparse.ArgumentParser(prog='shuffle_corpus',
                                          parents=[Corpora.parent_parser])
-        parser.add_argument('delimiters')
-        parser.add_argument('node')
+        parser.add_argument('--delimiters', default=['.', ',', ';', ':', '!', '?'],
+                            nargs='+')
+        parser.add_argument('mode', choices=['sentence', 'text'])
         parser.add_argument('end_sign')
         args = parser.parse_args(sys.argv[3:])
-        text_corpora.shuffle_corpus(args.corpus_file, args.delimiters,
-                                    args.node, args.end_sign)
+        text_corpora.shuffle_corpus(args.corpora_file, args.delimiters,
+                                    args.mode, args.end_sign)
 
 
 class Network(object):
