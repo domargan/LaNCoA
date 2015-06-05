@@ -29,6 +29,19 @@ __license__ = "GPL"
 
 
 def hubs(network, n=20, d="directed"):
+    """Find top n nodes with highest degree and
+    write results in the new file.
+
+    Parameters
+    ----------
+    network : network edge list
+    n : int
+        number of wanted nodes
+    d : directed or undirected
+        if directed is selected than two new files
+        will be created. One for in-degree and one
+        for out-degree
+    """
     n = int(n)
 
     if d == "directed":
@@ -78,6 +91,17 @@ def hubs(network, n=20, d="directed"):
 
 
 def weightiest_edges(network, n=20, d="directed"):
+    """Find top n edges with highest weights and
+    write results in the new file.
+
+    Parameters
+    ----------
+    network : network edge list
+    n : int
+        number of wanted edges
+    d : directed or undirected
+        type of graph
+    """
     if d == "directed":
         g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
     elif d == "undirected":
@@ -102,6 +126,23 @@ def weightiest_edges(network, n=20, d="directed"):
 
 
 def node_distance(network, node, nodes_file, d="directed", w="weighted"):
+    """Find node distances between specific node and
+    other nodes defined in nodes_file.
+    Write results in the new file.
+
+    Parameters
+    ----------
+    network : network edge list
+    node : string
+        node for which distances will be calculated
+    nodes_file : file
+        file with list of nodes
+    d : directed or undirected
+        type of graph
+    w : weighted or unweighted
+        if unweighted is selected than every edge
+        has weight/distance/cost 1
+    """
     if d == "directed":
         g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
     elif d == "undirected":
