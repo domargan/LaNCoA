@@ -34,12 +34,12 @@ def remove_stopwords(corpus_file, delimiter_list, stopwords_file):
 
     Parameters
     ----------
-        corpus_file: file
-            original text file from which stopwords will be removed
-        delimiter_list: list
-            list of delimiters
-        stopwords_file: file
-            file containing the list of stopwords
+    corpus_file : file
+        original text file from which stopwords will be removed
+    delimiter_list : list
+        list of delimiters
+    stopwords_file : file
+        file containing the list of stopwords
     """
     punct_split_dict = {d: d + " " for d in delimiter_list}
 
@@ -82,17 +82,17 @@ def lemmatize(corpus_file, delimiter_list, lemmas_file, lemma_splitter):
 
     Parameters
     ----------
-        corpus_file: file
-            original text file on which lemmatization
-            process will be applied
-        delimiter_list: list
-            list of delimiters
-        lemmas_file: file
-            file containing the list of all word
-            form-lemma pairs
-        lemma_splitter: char
-            char that splits word form-lemma pair in lemmas_file,
-            e.g. '\t', ' '
+    corpus_file : file
+        original text file on which lemmatization
+        process will be applied
+    delimiter_list : list
+         list of delimiters
+    lemmas_file : file
+        file containing the list of all word
+        form-lemma pairs
+    lemma_splitter : char
+        char that splits word form-lemma pair in lemmas_file,
+        e.g. '\t', ' '
     """
     punct_split_dict = {d: d + " " for d in delimiter_list}
     with open(corpus_file, "r", encoding="utf-8") as f:
@@ -153,20 +153,20 @@ def clean_corpus(corpus, preserve_list=None, nfkd="No", split="No",
 
     Parameters
     ----------
-        corpus: file
-            original text file for text cleaning
-        preserve_list: list
-            list of interpunctions
-        nfkd: Yes or No (default="No")
-            if selected choice is Yes than the normal form NFKD
-            will replace all compatibility characters with their
-            equivalent.
-        split: Yes or No (default="No")
-            if selected choice is Yes than an empty char behind
-            all interpunctions from preserve_list will be added
-            in text file
-        replace_char: char
-            character that will replace all unwanted characters in file
+    corpus : file
+        original text file for text cleaning
+    preserve_list: list
+        list of interpunctions
+    nfkd : Yes or No (default="No")
+        if selected choice is Yes than the normal form NFKD
+        will replace all compatibility characters with their
+        equivalent.
+    split : Yes or No (default="No")
+        if selected choice is Yes than an empty char behind
+        all interpunctions from preserve_list will be added
+        in text file
+    replace_char : char
+        character that will replace all unwanted characters in file
 
     """
     from unicodedata import normalize
@@ -237,15 +237,15 @@ def shuffle_corpus(corpus, delimiter_list, mode, end_sign):
 
     Parameters
     ----------
-        corpus: file
-            original file on which shuffling
-            procedure will be applied
-        delimiter_list: list
-            list of delimiters
-        mode: sentence or text
-            shuffling principles
-        end_sign: char
-            character that will mark end of a sentence
+    corpus : file
+        original file on which shuffling
+        procedure will be applied
+    delimiter_list : list
+        list of delimiters
+    mode : sentence or text
+        shuffling principles
+    end_sign : char
+        character that will mark end of a sentence
     """
     from re import split as re_split
     from random import shuffle
