@@ -28,6 +28,24 @@ __license__ = "GPL"
 
 
 def jaccard(network1, network2, d="directed"):
+    """Returns Jaccard similarity coefficient and
+    distance of two different networks of the same
+    sets of nodes.
+
+    Parameters
+    ----------
+    network1 : first network edge list
+    network2 : second network edge list
+    d : directed or undirected
+        type of graph
+
+    Returns
+    -------
+    j : float
+        Jaccard similarity coefficient
+    jd : float
+        Jaccard distance
+    """
     if d == "directed":
         g1 = nx.read_weighted_edgelist(network1, create_using=nx.DiGraph())
         g2 = nx.read_weighted_edgelist(network2, create_using=nx.DiGraph())
@@ -45,6 +63,20 @@ def jaccard(network1, network2, d="directed"):
 
 
 def total_overlap(network1, network2, d="directed"):
+    """Returns value of total overlap measure for
+    two given networks of the same sets of nodes.
+
+    Parameters
+    ----------
+    network1 : first network edge list
+    network2 : second network edge list
+    d : directed or undirected
+        type of graph
+
+    Returns
+    -------
+    t_overlap : float
+    """
     if d == "directed":
         g1 = nx.read_weighted_edgelist(network1, create_using=nx.DiGraph())
         g2 = nx.read_weighted_edgelist(network2, create_using=nx.DiGraph())
@@ -63,6 +95,20 @@ def total_overlap(network1, network2, d="directed"):
 
 
 def total_weighted_overlap(network1, network2, d="directed"):
+    """Returns value of total weighted overlap measure for
+    two given networks of the same sets of nodes.
+
+    Parameters
+    ----------
+    network1 : first network edge list
+    network2 : second network edge list
+    d : directed or undirected
+        type of graph
+
+    Returns
+    -------
+    t_w_overlap : float
+    """
     if d == "directed":
         g1 = nx.read_weighted_edgelist(network1, create_using=nx.DiGraph())
         g2 = nx.read_weighted_edgelist(network2, create_using=nx.DiGraph())
