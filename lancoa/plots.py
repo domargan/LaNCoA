@@ -30,6 +30,21 @@ __license__ = "GPL"
 
 
 def draw_rank_plot(name, networks, d="undirected", m="selectivity"):
+    """Draws rank plot of specified measure for
+    one or more given networks.
+
+
+    Parameters
+    ----------
+    name : string
+        name of file that will be created
+    networks : edge list or array of edge lists
+    d : in, out or undirected
+        direction that will be used in calculating
+        node measure
+    m : selectivity, degree or strength
+        network measure that will be plotted
+    """
     figname = str(name)
     colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
     markers = ["o", "v", "^", "s", "*", "p"]
@@ -65,6 +80,19 @@ def draw_rank_plot(name, networks, d="undirected", m="selectivity"):
 
 
 def draw_histogram(name, network, d="undirected", m="selectivity"):
+    """Draws histogram of specified measure for given network.
+
+    Parameters
+    ----------
+    name : string
+        name of file that will be created
+    networks : network edge list
+    d : in, out or undirected
+        direction that will be used in calculating
+        node measure
+    m : selectivity, degree or strength
+        network measure that will be plotted
+    """
     figname = str(name)
     measure_sequence = measure_dict(network, m, d).values()
     plt.hist(measure_sequence, facecolor="blue",
@@ -80,6 +108,22 @@ def draw_histogram(name, network, d="undirected", m="selectivity"):
     plt.clf()
 
 def draw_scatterplot(name, networks, d="undirected", xm="selectivity", ym="strength"):
+    """Draws scatter plot of specified measures for
+    one or more given networks.
+
+    Parameters
+    ----------
+    name : string
+        name of file that will be created
+    networks : edge list or array of edge lists
+    d : in, out or undirected
+        direction that will be used in calculating
+        node measure
+    xm : selectivity, degree or strength
+        network measure for x axis
+    ym : selectivity, degree or strength
+        network measure for y axis
+    """
     figname = str(name)
     colors = ["blue", "red", "green", "cyan", "magenta", "yellow"]
     area = 30

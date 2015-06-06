@@ -30,6 +30,31 @@ __license__ = "GPL"
 
 def cooccurrence_net(corpus, delimiter_list, d="directed",
                      w="weighted", window=1, lower="Yes"):
+    """Creates co-occurrence network from text file.
+
+    Links are established within a window between the
+    first word and n-1 subsequent words.
+
+    Parameters
+    ----------
+    corpus : file
+        original text file from which the network
+        will be created
+    delimiter_list : list
+        list of delimiters
+    d : directed or undirected
+        type of graph that will be created
+    w : weighted or unweighted
+        if weighted is selected than the weight of the link
+        between two words will be proportional to the
+        overall frequencies of the corresponding words
+        co-occurrence within a original network
+    window : int
+        set of n subsequent words from a text
+    lower : Yes or No
+        defines whether all characters in a text will be
+        changed to lower or not
+    """
     with open(corpus, "r", encoding="utf-8") as f:
         if lower == "Yes":
             c_list = f.read().lower().split()
@@ -172,6 +197,23 @@ def syntax_net(corpus, d="directed", w="weighted"):
 
 
 def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
+    """Creates syllable network from co-occurrence of syllables
+    within words.
+
+    Parameters
+    ----------
+    corpus : file
+        original text file from which the network
+        will be created
+    syllable_list :
+    d : directed or undirected
+        type of graph
+    w : weighted or unweighted
+        if weighted is selected than the weight of the link
+        between two syllables will be proportional to the
+        overall frequencies of the corresponding syllables
+        co-occurrence within words from a text
+    """
     with open(corpus, "r", encoding="utf-8") as f:
         f_r = f.readlines()
 
@@ -215,6 +257,25 @@ def syllable_net(corpus, syllable_list, d="directed", w="weighted"):
 
 
 def grapheme_net(syllable_network, d="directed", w="weighted"):
+    """Creates grapheme network.
+
+    The structure of grapheme network depends on a
+    existing network of syllables.
+
+    Two graphemes are linked if they co-occur as neighbours
+    within a syllable.
+
+    Parameters
+    ----------
+    syllable_network : edge list of a syllable network
+    d : directed or undirected
+        type of graph
+    w : weighted or unweighted
+        if weighted is selected than the weight of the link
+        between two graphemes will be proportional to the
+        overall frequencies of the corresponding graphemes
+        co-occurring within syllable from a syllable network
+    """
     if d == "directed":
         syllable_net = nx.read_weighted_edgelist(syllable_network, create_using=nx.DiGraph())
         g = nx.DiGraph()
@@ -243,6 +304,24 @@ def grapheme_net(syllable_network, d="directed", w="weighted"):
 
 
 def wordlist_subnet(word_network, word, words_file, d="directed", w="weighted"):
+    """Creates word-list network which is a simple subnetwork
+    based on provided list of words.
+
+    Parameters
+    ----------
+    word_network : edge list of the original network
+    word : string
+    words_file : file
+        file containing words that will be extracted
+        from the original network
+    d : directed or undirected
+        type of graph
+    w : weighted or unweighted
+        if weighted is selected than the weight of the link
+        between two words will be proportional to the
+        overall frequencies of the corresponding words
+        co-occurrence within a original network
+    """
     with open(words_file, "r", encoding="utf-8") as f:
         word_list = f.read().splitlines()
 
@@ -265,6 +344,27 @@ def wordlist_subnet(word_network, word, words_file, d="directed", w="weighted"):
 
 
 def ego_word_subnet(word_network, word, radius=1, d="directed", w="weighted", neighborhood="all"):
+    """Creates word-ego network which is a subnetwork of
+    neighbours centered at one specified node (word)
+    within a given radius.
+
+    Parameters
+    ----------
+    word_network : edge list of original network
+    word : string
+        subnetwork will be created of neighbours
+        centered at specified word
+    radius : int
+        radius from which subnetwork will be created
+    d : directed or undirected
+        type of graph
+    w : weighted or unweighted
+        if weighted is selected than the weight of the link
+        between two words will be proportional to the
+        overall frequencies of the corresponding words
+        co-occurrence within a original network
+    neighborhood : successors, predecessors or all
+    """
     if d == "directed":
         word_net = nx.read_weighted_edgelist(word_network, create_using=nx.DiGraph())
         if neighborhood == "successors":

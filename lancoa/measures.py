@@ -29,6 +29,19 @@ __license__ = "GPL"
 
 
 def in_selectivity(network):
+    """Calculate in-selectivity for each node
+    in graph and write results in dictionary.
+
+    Parameters
+    ----------
+    network : edge list of the network
+
+    Returns
+    -------
+    selectivity_dict : dict
+        a dictionary where keys are graph nodes
+        and values are calculated in-selectivity
+    """
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
 
     selectivity_dict = {}
@@ -45,6 +58,19 @@ def in_selectivity(network):
 
 
 def out_selectivity(network):
+    """Calculate out-selectivity for each node
+    in graph and write results in dictionary.
+
+    Parameters
+    ----------
+    network : edge list of network
+
+    Returns
+    -------
+    selectivity_dict : dict
+        a dictionary where keys are graph nodes
+        and values are calculated out-selectivity
+    """
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
 
     selectivity_dict = {}
@@ -61,6 +87,19 @@ def out_selectivity(network):
 
 
 def selectivity(network):
+    """Calculate selectivity for each node
+    in graph and write results in dictionary.
+
+    Parameters
+    ----------
+    network : edge list of network
+
+    Returns
+    -------
+    selectivity_dict : dict
+        a dictionary where keys are graph nodes
+        and values are calculated selectivity
+    """
     g = nx.read_weighted_edgelist(network)
 
     selectivity_dict = {}
@@ -115,6 +154,21 @@ def out_ipr(network):
 
 
 def reciprocity(network):
+    """Returns reciprocity of the given network.
+
+    Parameters
+    ----------
+    network : edge list of the network
+
+    Returns
+    -------
+    r : float
+        network reciprocity
+    a : float
+        the ratio of observed to possible directed links
+    ro : float
+        Garlaschelli and Loffredo's definition of reciprocity
+    """
     g = nx.read_weighted_edgelist(network, create_using=nx.DiGraph())
 
     self_loops = g.number_of_selfloops()
@@ -129,6 +183,19 @@ def reciprocity(network):
 
 
 def entropy(values_dict):
+    """Returns entropy of the given measure.
+
+    Parameters
+    ----------
+    values_dict : dict
+        dictionary where keys are graph nodes
+        and values are numbers representing some
+        measure, e.g. selectivity
+
+    Returns
+    -------
+    entropy : float
+    """
     n = len(values_dict)
 
     entropy = 0
